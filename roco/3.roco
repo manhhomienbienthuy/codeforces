@@ -1,0 +1,38 @@
+co lcm {
+eq [2] [0] 0
+if [2]
+   div [3] [3] [1]
+if [2]
+   iout [3]
+if [2]
+   ac
+eq [2] [1] 0
+if [2]
+   div [3] [3] [0]
+if [2]
+   iout [3]
+if [2]
+   ac
+eq [2] [0] [1]
+if [2]
+   div [3] [3] [0]
+if [2]
+   iout [3]
+if [2]
+   ac
+if [2]
+   ac
+gt [2] [0] [1]
+if [2]
+   sub [0] [0] [1]
+gt [2] [1] [0]
+if [2]
+   sub [1] [1] [0]
+ca lcm
+ac
+}
+iin [0]
+iin [1]
+mul [3] [0] [1]
+ca lcm
+ac

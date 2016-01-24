@@ -1,0 +1,35 @@
+co binary {
+eq [2] [1] 0
+if [2]
+   ac
+if [2]
+   ac
+gt [2] [0] [1]
+eq [3] [0] [1]
+add [2] [2] [3]
+if [2]
+   iout 1
+if [2]
+   set [4] 1
+if [2]
+   sub [0] [0] [1]
+if [2]
+   div [1] [1] 2
+lt [2] [0] [1]
+eq [5] [4] 1
+add [2] [2] [5]
+eq [2] [2] 2
+if [2]
+   iout 0
+lt [2] [0] [1]
+if [2]
+   div [1] [1] 2
+ca binary
+ac
+}
+
+iin [0]
+set [1] 524288
+set [4] 0
+ca binary
+ac

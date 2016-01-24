@@ -1,0 +1,38 @@
+co calc {
+cin [0]
+eq [1] [0] 10
+if [1]
+   ac
+eq [1] [0] 72
+if [1]
+   set [2] 1
+if [1]
+   ac
+eq [1] [0] 81
+if [1]
+   set [2] 1
+if [1]
+   ac
+eq [1] [0] 57
+if [1]
+   set [2] 1
+if [1]
+   ac
+ca calc
+ac
+}
+set [2] 0
+ca calc
+eq [3] [2] 1
+if [3]
+   cout 89
+if [3]
+   cout 69
+if [3]
+   cout 83
+eq [3] [2] 0
+if [3]
+   cout 78
+if [3]  
+   cout 79
+ac

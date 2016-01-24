@@ -1,0 +1,57 @@
+co read{
+eq [2] [1] [0]
+if [2]
+   ac
+iin [[1]]
+add [1] [1] 1
+ca read
+ac
+}
+
+co subsort {
+eq [3] [2] [0]
+if [3]
+   ac
+gt [3] [[1]] [[2]]
+if [3]
+   set [4] [[1]]
+if [3]
+   set [[1]] [[2]]
+if [3]
+   set [[2]] [4]
+add [2] [2] 1
+ca subsort
+ac
+}
+
+co sort {
+eq [6] [1] [5]
+if [6]
+   ac
+add [2] [1] 1
+ca subsort
+add [1] [1] 1
+ca sort
+ac
+}
+
+co print {
+eq [2] [1] [0]
+if [2]
+   ac
+iout [[1]]
+cout 32
+add [1] [1] 1
+ca print
+ac
+}
+iin [0]
+add [0] [0] 10	
+set [1] 10
+ca read
+set [1] 10
+sub [5] [0] 1
+ca sort
+set [1] 10
+ca print
+ac

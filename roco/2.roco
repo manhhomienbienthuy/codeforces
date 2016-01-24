@@ -1,0 +1,17 @@
+co tinh{
+cin [2]
+eq [3] [2] 10
+if [3] ac
+sub [2] [2] 48
+mul [2] [2] [4]
+add [1] [2] [1]
+mul [4] [4] 10
+ca tinh
+ac
+}
+iin [1]
+set [4] 1
+cin [2]
+ca tinh
+iout [1]
+ac

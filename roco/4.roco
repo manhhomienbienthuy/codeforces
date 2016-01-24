@@ -1,0 +1,30 @@
+co print {
+eq [3] [5] 0
+if [3]
+   cout 10
+if [3]
+   ac
+cout 42
+sub [5] [5] 1
+ca print
+ac
+}
+
+co calc {
+add [1] [1] 1
+set [5] [1]
+ca print
+eq [2] [1] [0]
+if [2]
+   ac
+ca calc
+ac
+}
+
+iin [0]
+eq [4] [0] 0
+if [4]
+   ac
+set [1] 0
+ca calc
+ac
