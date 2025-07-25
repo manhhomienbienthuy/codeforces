@@ -1,28 +1,14 @@
 a = gets.chomp
 b = gets.chomp
-while a[0] == '0'
-  a = a[1..-1]
-end
-while b[0] == '0'
-  b = b[1..-1]
-end
-if a.length > b.length
-  puts ">"
-  exit
-end
-if a.length < b.length
-  puts "<"
-  exit
-end
+a = a[1..-1] while a[0] == '0'
+b = b[1..-1] while b[0] == '0'
+puts ">" if a.length > b.length
+puts "<" if a.length < b.length
+exit unless a.length == b.length
 
 (0..a.length - 1).each do |i|
-  if a[i] < b[i]
-    puts "<"
-    exit
-  end
-  if a[i] > b[i]
-    puts ">"
-    exit
-  end
+  puts "<" if a[i] < b[i]
+  puts ">" if a[i] > b[i]
+  exit unless a[i] == b[i]
 end
 puts "="
