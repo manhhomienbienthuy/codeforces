@@ -1,26 +1,37 @@
-#!/usr/bin/env python3
-
 n, m = map(int, input().split())
-a = [list(map(int, input().split())) for i in range(m)]
-
-res = []
-
-def inside(s, a):
-    for k in range(a[0], a[0] + a[1]):
-        if s[k-1] == 0:
-            return False
-    return True
-
+data = []
 for i in range(m):
-    cov = [0 for i in range(n)]
-    for j in range(m):
-        if i != j and j not in res:
-            for k in range(a[j][0], a[j][0] + a[j][1]):
-                cov[k - 1] = 1
-    if inside(cov, a[i]):
-        res.append(i)
+    x, y = map(int, input().split())
+    data.append([x, x + y - 1, i + 1])
 
-print(len(res))
-for i in res:
-    print(i + 1, end=' ')
-
+data = list(sorted(data, key=lambda x: x[0], reverse=True))
+ans = []
+while data:
+    now = data.pop()
+    while data and data[-1][0] == now[0]:
+        if data[-1][1] > now[1]:
+            ans.append(now[2])
+            now = data.pop()
+        else:
+            ans.append(data[-1][2])
+            data.pop()
+    tmp = None
+    while data and data[-1][0] <= now[1]:
+        if data[-1][1] <= now[1]:
+            ans.append(data[-1][2])
+            data.pop()
+        else:
+            if tmp:
+                if tmp[1] > data[-1][1]:
+                    ans.append(data[-1][2])
+                    data.pop()
+                else:
+                    ans.append(tmp[2])
+                    tmp = data.pop()
+            else:
+                tmp = data.pop()
+    if tmp:
+        tmp[0] = now[1]+1
+        data.append(tmp)
+print(len(ans))
+print(*ans)
