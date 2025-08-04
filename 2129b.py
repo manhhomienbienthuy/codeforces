@@ -5,6 +5,6 @@ for _ in range(t):
     result = 0
     for i in range(n):
         left = sum(p[j] > p[i] for j in range(i))
-        right = sum(p[j] > p[i] for j in range(i + 1, n))
+        right = n - p[i] - left
         result += min(left, right)
     print(result)
