@@ -12,6 +12,5 @@ for _ in range(t):
             break
     else:
         j = n
-    for k in range(i, i + (j - i + 1) // 2):
-        p[k], p[j - k + i ] = p[j - k + i], p[k]
+    p = p[:i] + p[i:j+1][::-1] + p[j + 1:]
     print(*p)
