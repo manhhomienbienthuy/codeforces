@@ -20,7 +20,7 @@ def insert(pos, val):
 
 for i in range(n - 1, 0, -1):
     pass_len = n - i
-    candidates = [1]
+    candidates = [0, 1]
 
     for j in range(2, pass_len + 1):
         left_next = positions[results[j - 1] + 1] if results[j - 1] + 1 <= n + 1 else 0
@@ -48,7 +48,7 @@ for i in range(n - 1, 0, -1):
 
     if insert_pos == candidates[l - 1] and check_flag:
         insert_pos += 1
-    elif check(results[insert_pos], i, ):
+    elif insert_pos == 0 or check(results[insert_pos], i):
         insert_pos += 1
     else:
         l, r = 1, pass_len
