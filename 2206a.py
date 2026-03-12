@@ -19,10 +19,10 @@ def insert(pos, val):
     positions[val] = pos
 
 for i in range(n - 1, 0, -1):
-    proc_len = n - i
+    pass_len = n - i
     candidates = [1]
 
-    for j in range(2, proc_len + 1):
+    for j in range(2, pass_len + 1):
         left_next = positions[results[j - 1] + 1] if results[j - 1] + 1 <= n + 1 else 0
         right_next = positions[results[j] + 1] if results[j] + 1 <= n + 1 else 0
         pos_next = positions[i + 1]
@@ -31,11 +31,11 @@ for i in range(n - 1, 0, -1):
         elif left_next < right_next and left_next < pos_next and pos_next < right_next:
             candidates.append(j)
 
-    if candidates[-1] != proc_len:
-        candidates.append(proc_len)
+    if candidates[-1] != pass_len:
+        candidates.append(pass_len)
 
     l, r = 1, len(candidates) - 1
-    candidates.append(proc_len + 1)
+    candidates.append(pass_len + 1)
     check_flag = False
     while l <= r:
         mid = (l + r) // 2
@@ -48,8 +48,10 @@ for i in range(n - 1, 0, -1):
 
     if insert_pos == candidates[l - 1] and check_flag:
         insert_pos += 1
-    elif check(i, results[insert_pos]):
-        l, r = 1, proc_len
+    elif check(results[insert_pos], i, ):
+        insert_pos += 1
+    else:
+        l, r = 1, pass_len
         while l <= r:
             mid = (l + r) // 2
             if check(results[mid], i):
@@ -57,8 +59,6 @@ for i in range(n - 1, 0, -1):
             else:
                 r = mid - 1
         insert_pos = l
-    else:
-        insert_pos += 1
 
     insert(insert_pos, i)
 
