@@ -29,22 +29,10 @@ for _ in range(t):
     if y < 0 and sub_b + y < 0:
         print('NO')
         continue
-    if count_a == 0:
-        if x < 0:
-            print('YES' if x + y >= 0 else 'NO')
-        else:
-            print('YES' if y >= (x - add_a) else 'NO')
+    if count_a == 0 and x >= 0:
+        print('YES' if y >= (x - add_a) else 'NO')
         continue
-    if count_b == 0:
-        if y < 0:
-            print('YES' if x + y >= 0 else 'NO')
-        else:
-            print('YES' if x >= (y - add_b) else 'NO')
-        continue
-    if x < 0 and y < 0:
-        print('NO')
-        continue
-    if x >= 0 and y >= 0:
-        print('YES')
+    if count_b == 0 and y >= 0:
+        print('YES' if x >= (y - add_b) else 'NO')
         continue
     print('YES' if x + y >= 0 else 'NO')
