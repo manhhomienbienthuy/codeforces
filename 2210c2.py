@@ -27,8 +27,10 @@ for _ in range(t):
 
     dp_prev = [int(cand[0][i] != a[0]) for i in range(len(cand[0]))]
     for i in range(1, n):
-        dp_cur = [-100000] * len(cand[i])
+        dp_cur = [-1] * len(cand[i])
         for j, prev in enumerate(cand[i - 1]):
+            if dp_prev[j] == -1:
+                continue
             for k, cur in enumerate(cand[i]):
                 if gcd(prev, cur) == g[i]:
                     dp_cur[k] = max(dp_cur[k], dp_prev[j] + (cur != a[i]))
