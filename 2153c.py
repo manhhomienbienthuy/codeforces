@@ -2,37 +2,37 @@ t = int(input())
 for _ in range(t):
     n = int(input())
     a = sorted(map(int, input().split()), reverse=True)
-    other = []
-    result = result_len = l = 0
+
+    pairs_sum = 0
+    pairs_len = 0
+    singles = []
+
     i = 0
     while i < n:
-        if i == n - 1:
-            other.append(a[i])
-            l += 1
-            break
-        elif a[i] == a[i + 1]:
-            result += 2 * a[i]
-            result_len += 2
+        if i + 1 < n and a[i] == a[i + 1]:
+            pairs_sum += 2 * a[i]
+            pairs_len += 2
             i += 2
         else:
-            other.append(a[i])
-            l += 1
+            singles.append(a[i])
             i += 1
-    if not result:
+
+    if pairs_sum == 0:
         print(0)
         continue
-    if l == 0:
-        print(result)
+
+    if not singles:
+        print(pairs_sum)
         continue
-    prev = other[0]
-    for i in range(1, l):
-        cur = other[i]
-        if prev < cur + result:
-            print(result + prev + cur)
+
+    prev = singles[0]
+    for cur in singles[1:]:
+        if prev < cur + pairs_sum:
+            print(pairs_sum + prev + cur)
             break
         prev = cur
     else:
-        if prev < result:
-            print(result + prev)
+        if prev < pairs_sum:
+            print(pairs_sum + prev)
         else:
-            print(result if result_len > 2 else 0)
+            print(pairs_sum if pairs_len > 2 else 0)
