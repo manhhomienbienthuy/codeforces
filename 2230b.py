@@ -1,10 +1,10 @@
 t = int(input())
 for _ in range(t):
-    s = list(map(int, input().strip()))
-    even = odd = 0
-    for d in s:
-        if d == 2:
-            even += 1
-        elif d & 1:
-            odd = 1 + max(odd, even)
-    print(len(s) - max(odd, even))
+    s = input()
+    n = len(s)
+    pref = [0] * n
+    suf = [0] * (n + 1)
+    for i in range(n):
+        pref[i] = pref[i - 1] + (s[i] == '2')
+        suf[n - i - 1] = suf[n - i] + (s[n - i - 1] in '13')
+    print(n - max(pref[i] + suf[i] for i in range(n)))
