@@ -7,10 +7,5 @@ for _ in range(t):
         continue
 
     d = c.count(1)
-    ans = sum(c) - d
-    if d == n - 1:
-        ans += min(d, ans // 2)
-    elif ans:
-        e = sum(x // 2 - 1 for x in c if x >= 4)
-        ans += min(d, e)
-    print(ans)
+    e = sum(x // 2 - 1 for x in c if x >= 2) + (d == n - 1)
+    print(sum(c) - d + min(d, e))
