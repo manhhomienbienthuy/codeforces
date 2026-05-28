@@ -18,53 +18,52 @@ struct FastHash {
     }
 };
 
-ll calc(const vector<ll>& a, ll s, ll limit) {
-    unordered_map<ll, ll, FastHash> cnt;
-    cnt[0] = 1;
-
-    ll pref = 0;
-    ll res = 0;
-
-    for (ll v : a) {
-        if (v > limit) {
-            cnt.clear();
-            cnt[0] = 1;
-            pref = 0;
-            continue;
-        }
-
-        pref += v;
-
-        auto it = cnt.find(pref - s);
-        if (it != cnt.end()) {
-            res += it->second;
-        }
-
-        cnt[pref]++;
-    }
-
-    return res;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int t;
     cin >> t;
-
     while (t--) {
         int n;
         ll s, x;
         cin >> n >> s >> x;
 
         vector<ll> a(n);
-        for (int i = 0; i < n; i++) {
-            cin >> a[i];
+        for (int i = 0; i < n; i++) cin >> a[i];
+
+        ll ans = 0;
+
+        unordered_map<ll, ll, FastHash> before;
+        vector<ll>after;
+        after.push_back(0);
+
+        ll pref = 0;
+
+        for (auto v : a) {
+            if (v > x) {
+                before.clear();
+                after.clear();
+                after.push_back(0);
+                pref = 0;
+                continue;
+            }
+
+            if (v == x) {
+                for (auto p : after) {
+                    before[p]++;
+                }
+                after.clear();
+            }
+
+            pref += v;
+            after.push_back(pref);
+            if (before.count(pref - s)) {
+                ans += before[pref - s];
+            }
         }
 
-        ll ans = calc(a, s, x) - calc(a, s, x - 1);
-        cout << ans << '\n';
+        cout << ans << "\n";
     }
 
     return 0;
