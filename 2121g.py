@@ -8,8 +8,6 @@ for _ in range(t):
     d = sorted(d)
 
     ans = n * (n + 1) * (n + 2) // 6
-    pref = 0
     for i in range(n + 1):
-        ans += d[i] * i - pref
-        pref += d[i]
+        ans += d[i] * i - d[i] * (n - i)
     print(ans // 2)
