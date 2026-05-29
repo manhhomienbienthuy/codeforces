@@ -5,7 +5,7 @@ for _ in range(t):
     while l <= r:
         m = (l + r) // 2
         q, k = divmod(d, m + 1)
-        s = k * (q + 1) * (q + 2) // 2 + (m + 1 - k) * q * (q + 1) // 2
+        s = (m + 1) * q * (q + 1) // 2 + k * (q + 1)
         if s < h + m:
             r = m - 1
         else:
