@@ -1,13 +1,27 @@
+from math import isqrt
+
 t = int(input())
 for _ in range(t):
     n = int(input())
     a = list(map(int, input().split()))
-    sorted_a = sorted(set(a))
-    count = 0
+    b = isqrt(n)
+
+    ans = 0
     for i in range(n):
-        for x in sorted_a:
-            j = a[i] * x + i
-            if j >= n:
-                break
-            count += a[j] == x
-    print(count)
+        x = a[i]
+        if x >= n:
+            continue
+        if x > b:
+            for k in range(1, (n - i - 1) // x + 1):
+                j = i + x * k
+                ans += a[j] == k
+            for k in range(1, i // x + 1):
+                j = i - x * k
+                ans += a[j] == k
+        else:
+            for k in range(1, b + 1):
+                j = i + x * k
+                if j >= n:
+                    break
+                ans += a[j] == k
+    print(ans)
