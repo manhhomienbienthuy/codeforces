@@ -3,40 +3,37 @@ using namespace std;
 
 int main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
 
-    int t;
+    uint32_t t;
     cin >> t;
+
     while (t--) {
-        int n;
+        uint32_t n;
         cin >> n;
-        vector<int> a(n + 1);
-        for (int i = 1; i <= n; i++) cin >> a[i];
 
-        int B = max(1, (int)sqrt((double)n));
-        long long ans = 0;
+        vector<uint32_t> a(n);
+        for (int i = 0; i < n; i++) cin >> a[i];
 
-        // Case 1: a[i] <= sqrt(n)
-        // For each small value v, for each j, check if i = j - v*a[j] is valid
-        for (int v = 1; v <= B; v++) {
-            for (int j = 1; j <= n; j++) {
-                long long ci = (long long)j - (long long)v * a[j];
-                if (ci >= 1 && ci < j && a[(int)ci] == v) {
-                    ans++;
+        uint32_t b = (int)sqrt(n);
+        uint32_t ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            uint32_t x = a[i];
+            if (x >= n) continue;
+            if (x > b) {
+                for (int k = 1; k <= (n - 1 - i) / x; k++) {
+                    long j = i + x * k;
+                    if (a[j] == k) ans++;
                 }
-            }
-        }
-
-        // Case 2: a[i] > sqrt(n), a[j] <= sqrt(n)
-        // For each i with large a[i], try each small v as potential a[j]
-        for (int i = 1; i <= n; i++) {
-            if (a[i] > B) {
-                for (int v = 1; v <= B; v++) {
-                    long long cj = (long long)i + (long long)a[i] * v;
-                    if (cj > n) break;
-                    if (a[(int)cj] == v) {
-                        ans++;
-                    }
+                for (int k = 1; k <= i / x; k++) {
+                    long j = i - x * k;
+                    if (a[j] == k) ans++;
+                }
+            } else {
+                for (int k = 1; k <= (n - 1 - i) / x && k <= b; k++) {
+                    int j = i + x * k;
+                    if (a[j] == k) ans++;
                 }
             }
         }
