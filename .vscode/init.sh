@@ -15,8 +15,7 @@ cr() {
     echo "#include <bits/stdc++.h>" >> $round$1.cpp
     echo "using namespace std;"  >> $round$1.cpp
     echo ""  >> $round$1.cpp
-    echo "int main()"  >> $round$1.cpp
-    echo "{"  >> $round$1.cpp
+    echo "int main() {"  >> $round$1.cpp
     echo "    ios::sync_with_stdio(false);"  >> $round$1.cpp
     echo "    cin.tie(nullptr);"  >> $round$1.cpp
     echo ""  >> $round$1.cpp
