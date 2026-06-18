@@ -10,6 +10,7 @@ cr() {
     echo "/*!" > $round$1.cpp
     echo " * author: manhhomienbienthuy" >> $round$1.cpp
     echo " * created: $(date -u -Iseconds)" >> $round$1.cpp
+    echo " * https://codeforces.com/contest/${round}/problem/${1^^}" >> $round$1.cpp
     echo " */" >> $round$1.cpp
     echo "" >> $round$1.cpp
     echo "#include <bits/stdc++.h>" >> $round$1.cpp
