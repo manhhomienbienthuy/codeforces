@@ -29,7 +29,7 @@ for _ in range(t):
             ok = False
             break
 
-        if ni ==b[i] - 1:
+        if ni == b[i] - 1:
             c = S[b[i]]
         else:
             c = S[b[i]] - S[b[i] - 1]

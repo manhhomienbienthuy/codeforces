@@ -1,6 +1,5 @@
 run() {
-    g++ $1
-    ./a.exe < input.txt
+    g++ $1 && ./a.exe < ../input.txt
 }
 
 read -p "Roud #: " round
