@@ -1,5 +1,5 @@
 run() {
-    g++ $1 && ./a.exe < input.txt
+    g++ -Wall -Wextra -Winvalid-pch -Wconversion -static -Wl,--stack=268435456 -O2 -std=c++23 -lstdc++exp $1 && ./a.exe < input.txt
 }
 
 read -p "Roud #: " round
