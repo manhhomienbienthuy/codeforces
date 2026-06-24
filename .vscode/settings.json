@@ -1,5 +1,9 @@
 {
     "[cpp]": {
         "editor.formatOnSave": true
-    }
+    },
+    "C_Cpp.clang_format_fallbackStyle": "Google",
+    "editor.minimap.enabled": false,
+    "editor.folding": false,
+    "editor.guides.indentation": false
 }

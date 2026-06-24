@@ -12,5 +12,6 @@ for _ in range(t):
                 w[i % n] = max(w[(i + 1) % n], h[i % n])
             else:
                 break
+        print(w)
         print(sum(w), end=' ')
     print()
