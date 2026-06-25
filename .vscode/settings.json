@@ -5,5 +5,9 @@
     "C_Cpp.clang_format_fallbackStyle": "Google",
     "editor.minimap.enabled": false,
     "editor.folding": false,
-    "editor.guides.indentation": false
+    "editor.guides.indentation": false,
+    "workbench.colorCustomizations": {
+        "editorLineNumber.foreground": "#aaa",
+        "editorLineNumber.activeForeground": "#666"
+    }
 }

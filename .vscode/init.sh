@@ -1,7 +1,3 @@
-run() {
-    g++ -Wall -Wextra -Winvalid-pch -Wconversion -static -O2 -std=c++23 $1 && ./a.exe < input.txt
-}
-
 read -p "Roud #: " round
 
 # create template for problem A, B, C
@@ -17,6 +13,7 @@ cr() {
     echo "" >> $round$1.cpp
     echo "int main() {" >> $round$1.cpp
     echo "  ios::sync_with_stdio(false);" >> $round$1.cpp
+    echo "  cin.tie(nullptr);" >> $round$1.cpp
     echo "" >> $round$1.cpp
     echo "  int t;" >> $round$1.cpp
     echo "  cin >> t;" >> $round$1.cpp
@@ -30,4 +27,12 @@ cr() {
     echo "  return 0;" >> $round$1.cpp
     echo "}" >> $round$1.cpp
 
+}
+
+run() {
+    g++ -Wall -Wextra -Winvalid-pch -Wconversion -static -O2 -std=c++23 $1 && ./a.exe < input.txt
+}
+
+cm() {
+    git add -A && git commit -m "$(date -Iseconds)" && git push origin main
 }
