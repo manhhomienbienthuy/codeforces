@@ -23,13 +23,12 @@ int main() {
       for (int i = 4; i < n - 1; i++) cout << i << " ";
       cout << 3 << " " << 1 << " " << n - 1 << " " << n << "\n";
     } else {
-      int z = n;
+      int z = n >> 1;
       z |= z >> 1;
       z |= z >> 2;
       z |= z >> 4;
       z |= z >> 8;
       z |= z >> 16;
-      if (z > n) z >>= 1;
 
       cout << (z << 1) + 1 << "\n";
 
