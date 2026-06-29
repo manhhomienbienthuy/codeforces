@@ -16,11 +16,12 @@ int main() {
   while (t--) {
     int n, d;
     cin >> n >> d;
-    vector<int> a(n);
-    for (auto& x : a) cin >> x;
-
-    int s = (int)a.size();
-    for (int i = 0; i < s; i++) a.push_back(a[i]);
+    vector<int> a(2 * n);
+    for (int i = 0; i < n; i++) {
+      int x;
+      cin >> x;
+      a[i] = a[i + n] = x;
+    }
 
     vector<int64_t> pref(2 * n + 1, 0);
     for (int i = 0; i < 2 * n; i++) {
@@ -28,15 +29,13 @@ int main() {
     }
 
     int64_t ans = 0;
-    for (int i = n; i < 2 * n; i++) {
-      int64_t left = pref[i] - pref[i - d];
-      int64_t right = pref[i % n + d + 1] - pref[i % n + 1];
-      int64_t neighbor = left + right;
-      int64_t x = 2LL * d * a[i % n] - neighbor;
-      if (x > 0) ans += x;
+    for (int i = 0; i < n; i++) {
+      int64_t left = pref[i + n] - pref[i - d + n];
+      int64_t right = pref[i + d + 1] - pref[i + 1];
+      ans += max(0ll, 2ll * d * a[i % n] - left - right);
     }
 
-    cout << ans << '\n';
+    cout << ans << "\n";
   }
 
   return 0;

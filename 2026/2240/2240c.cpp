@@ -30,7 +30,7 @@ int main() {
 
     cnt = 0;
     for (auto x : a) cnt += (all ^ x) < x;
-    cout << (cnt ? cnt : 1) << "\n";
+    cout << max(cnt, 1) << "\n";
   }
 
   return 0;

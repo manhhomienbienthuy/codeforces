@@ -1,4 +1,4 @@
-read -p "Roud #: " round
+read -p "Round #: " round
 
 # create template for problem A, B, C
 cr() {
