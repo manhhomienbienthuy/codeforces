@@ -6,6 +6,25 @@
     "editor.minimap.enabled": false,
     "editor.folding": false,
     "editor.guides.indentation": false,
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash",
+            "icon": "terminal-git-bash",
+            "args": ["--init-file", ".vscode/init.sh"]
+        }
+    },
     "workbench.colorCustomizations": {
         "editorLineNumber.foreground": "#aaa",
         "editorLineNumber.activeForeground": "#666"
