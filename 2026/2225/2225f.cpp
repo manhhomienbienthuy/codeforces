@@ -30,6 +30,7 @@ int main() {
       continue;
     }
 
+    // rolling hash
     vector<int64_t> h(n + 1, 0), p(n + 1, 1);
     for (int i = 0; i < n; i++) {
       int x = s[i];
@@ -55,8 +56,7 @@ int main() {
         else
           hi = mid - 1;
       }
-      if ((lo < cmp_len && s[i + lo] > s[result + lo]) ||
-          (lo == cmp_len && cur_len > result_len)) {
+      if ((lo < cmp_len && s[i + lo] > s[result + lo]) || lo == result_len) {
         result = i;
         result_len = cur_len;
       }
