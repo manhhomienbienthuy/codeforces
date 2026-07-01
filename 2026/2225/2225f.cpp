@@ -33,8 +33,7 @@ int main() {
     // rolling hash
     vector<int64_t> h(n + 1, 0), p(n + 1, 1);
     for (int i = 0; i < n; i++) {
-      int x = s[i];
-      h[i + 1] = (h[i] * BASE + x) % MOD;
+      h[i + 1] = (h[i] * BASE + s[i]) % MOD;
       p[i + 1] = (p[i] * BASE) % MOD;
     }
 
