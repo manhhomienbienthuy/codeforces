@@ -30,7 +30,7 @@ int main() {
     vector<int> ans;
 
     while (!a.empty()) {
-      auto first = *min_element(a.begin(), a.end());
+      auto first = ranges::min(a);
       auto l = first.size();
       ans.insert(ans.end(), first.begin(), first.end());
 

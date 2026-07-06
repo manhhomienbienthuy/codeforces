@@ -3,6 +3,7 @@
         "editor.formatOnSave": true
     },
     "C_Cpp.clang_format_fallbackStyle": "Google",
+    "C_Cpp.enhancedColorization": "enabled",
     "editor.minimap.enabled": false,
     "editor.folding": false,
     "editor.lineDecorationsWidth": 25,
