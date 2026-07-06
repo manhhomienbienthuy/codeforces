@@ -24,18 +24,15 @@ int main() {
     vector<vector<int>> border(n, vector<int>(n, 0));
 
     for (int l = 0; l < n; l++) {
-      int j = 0;
+      int prev = 0;
 
       for (int r = l + 1; r < n; r++) {
-        while (j && T[r] != T[l + j]) {
-          j = border[l][l + j - 1];
+        while (prev && T[r] != T[l + prev]) {
+          prev = border[l][l + prev - 1];
         }
 
-        if (T[r] == T[l + j]) {
-          j++;
-        }
-
-        border[l][r] = j;
+        prev += T[r] == T[l + prev];
+        border[l][r] = prev;
       }
     }
 
