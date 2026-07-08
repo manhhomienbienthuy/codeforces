@@ -18,37 +18,27 @@ int main() {
     cin >> a >> b;
     int n = (int)a.size(), m = (int)b.size();
 
-    vector<int> pa(n + 1, 0), pb(m + 1, 0);
-    for (int i = 0; i < n; i++) pa[i + 1] = (pa[i] + a[i] - '0') % 10;
-    for (int i = 0; i < m; i++) pb[i + 1] = (pb[i] + b[i] - '0') % 10;
+    vector<int> pref_a(n + 1, 0), pref_b(m + 1, 0);
+    for (int i = 0; i < n; i++) pref_a[i + 1] = (pref_a[i] + a[i] - '0') % 10;
+    for (int i = 0; i < m; i++) pref_b[i + 1] = (pref_b[i] + b[i] - '0') % 10;
 
-    vector<vector<int>> cmax(m + 1, vector<int>(10, -1));
-    cmax[0][0] = 0;
+    if (pref_a[n] != pref_b[m]) {
+      cout << -1 << '\n';
+      continue;
+    }
 
-    int ans = -1;
-    for (int i = 1; i <= n; i++) {
-      vector<int> rmax(10, -1);
-      vector<tuple<int, int, int>> upd;
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
 
-      for (int j = 1; j <= m; j++) {
-        for (int g = 0; g < 10; g++) {
-          if (cmax[j - 1][g] > rmax[g]) rmax[g] = cmax[j - 1][g];
-        }
-
-        int g = ((pa[i] - pb[j]) % 10 + 10) % 10;
-        if (rmax[g] >= 0) {
-          int val = rmax[g] + 1;
-          upd.push_back({j, g, val});
-          if (i == n && j == m) ans = max(ans, val);
-        }
-      }
-
-      for (auto [j, g, val] : upd) {
-        cmax[j][g] = max(cmax[j][g], val);
+    for (int i = 1; i <= n; ++i) {
+      for (int j = 1; j <= m; ++j) {
+        if (pref_a[i] == pref_b[j])
+          dp[i][j] = dp[i - 1][j - 1] + 1;
+        else
+          dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
       }
     }
 
-    cout << ans << '\n';
+    cout << dp[n][m] << '\n';
   }
 
   return 0;

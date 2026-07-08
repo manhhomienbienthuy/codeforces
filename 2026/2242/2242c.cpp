@@ -16,22 +16,23 @@ int main() {
   while (t--) {
     int n, k;
     cin >> n >> k;
-    vector<int> a(n);
-    for (auto& x : a) cin >> x;
-
     vector<int> len;
-    int i = 0;
-    while (i < n) {
-      int j;
-      for (j = i; j < n && a[j] == a[i]; j++);
-      len.push_back(j - i);
-      i = j;
+    int p = 0, px;
+    cin >> px;
+    for (int i = 1; i < n; i++) {
+      int x;
+      cin >> x;
+      if (x != px) {
+        len.push_back(i - p);
+        p = i;
+        px = x;
+      }
     }
+    len.push_back(n - p);
     sort(len.begin(), len.end());
 
-    int m = (int)len.size();
+    int m = (int)len.size(), cnt = 0;
     int64_t ans = 0, c = 0;
-    int cnt = 0;
 
     int idx = m - 1;
     while (idx >= 0) {
@@ -42,11 +43,11 @@ int main() {
         idx--;
       }
 
-      int64_t r = 0ll + k - c;
-      if (r % cnt == 0) {
-        int64_t v = r / cnt;
-        if (v >= 1 - u) ans++;
+      int64_t b = c - cnt * (u - 1);
+      if (b > k) {
+        break;
       }
+      ans += (k - b) % cnt == 0;
     }
 
     cout << ans << '\n';

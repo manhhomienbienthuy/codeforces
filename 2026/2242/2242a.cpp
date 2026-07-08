@@ -16,20 +16,13 @@ int main() {
   while (t--) {
     int k;
     cin >> k;
-    vector<int> c(k);
-    for (auto& x : c) cin >> x;
     bool ok = false;
     int cnt = 0;
-    for (auto x : c) {
-      if (x > 2) {
-        ok = true;
-        break;
-      }
-      if (x > 1) cnt++;
-      if (cnt > 1) {
-        ok = true;
-        break;
-      }
+    for (int i = 0; i < k; i++) {
+      int x;
+      cin >> x;
+      cnt += x > 1;
+      ok = ok || (x > 2) || (cnt > 1);
     }
 
     cout << (ok ? "YES\n" : "NO\n");
