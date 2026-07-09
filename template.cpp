@@ -115,6 +115,44 @@ int lcp(const rolling_hash& rh, int a, int b, int maxLen) {
   return lo;
 }
 
+struct fenwick {
+  int n;
+  vector<int64_t> bit;
+
+  fenwick(int n_) : n(n_), bit(n + 1, 0) {}
+
+  void add(int p, int64_t v) {
+    for (; p <= n; p += p & -p) {
+      bit[p] += v;
+    }
+  }
+
+  int64_t sum(int p) const {
+    int64_t res = 0;
+    for (; p > 0; p -= p & -p) {
+      res += bit[p];
+    }
+    return res;
+  }
+
+  int64_t sum(int l, int r) const { return sum(r) - sum(l - 1); }
+};
+
+struct FastHash {
+  static uint64_t splitmix64(uint64_t x) {
+    x += 0x9e3779b97f4a7c15;
+    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+    x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+    return x ^ (x >> 31);
+  }
+
+  size_t operator()(uint64_t x) const {
+    static const uint64_t FIXED_RANDOM =
+        chrono::steady_clock::now().time_since_epoch().count();
+    return splitmix64(x + FIXED_RANDOM);
+  }
+};
+
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
@@ -125,15 +163,26 @@ int main() {
   while (t--) {
     int n;
     cin >> n;
-    vector<int64_t> a(n);
+    vector<int> a(n);
     for (auto& x : a) cin >> x;
+
+    // coordinate compression
+    vector<int> vals = a;
+    sort(vals.begin(), vals.end());
+    vals.erase(unique(vals.begin(), vals.end()), vals.end());
+
+    int m = (int)vals.size();
+
+    auto gid = [&](int x) {
+      return int(lower_bound(vals.begin(), vals.end(), x) - vals.begin()) + 1;
+    };
 
     int64_t ans = 1e18;
     int i = 0;
     while (i < n) {
       int j = i;
       while (j < n && a[i] == a[j]) j++;
-      ans = min(ans, a[i] * (n - j + i));
+      ans = min(ans, 1ll * a[i] * (n - j + i));
       i = j;
     }
 
