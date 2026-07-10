@@ -71,6 +71,22 @@ int lcs(vector<int>& s1, vector<int>& s2) {
   return dp[n][m];
 }
 
+// longest increasing subsequence
+int find_lis(const vector<int>& a) {
+  vector<int> dp;
+  for (int i : a) {
+    int pos = lower_bound(dp.begin(), dp.end(), i) - dp.begin();
+    if (pos == dp.size()) {
+      // we can have a new, longer increasing subsequence!
+      dp.push_back(i);
+    } else {
+      // oh ok, at least we can make the ending element smaller
+      dp[pos] = i;
+    }
+  }
+  return dp.size();
+}
+
 struct rolling_hash {
   static const int MOD1 = 1000000007;
   static const int MOD2 = 1000000009;
