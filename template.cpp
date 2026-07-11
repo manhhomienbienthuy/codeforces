@@ -1,3 +1,12 @@
+/*!
+ * author: manhhomienbienthuy
+ * template C++ for Codeforces
+ */
+
+#ifdef ONLINE_JUDGE
+#pragma GCC optimize("Ofast,unroll-loops")
+#endif
+
 #include <bits/stdc++.h>
 using namespace std;
 

@@ -4,7 +4,9 @@
  * https://codeforces.com/contest/2242/problem/F
  */
 
+#ifdef ONLINE_JUDGE
 #pragma GCC optimize("Ofast,unroll-loops")
+#endif
 
 #include <bits/stdc++.h>
 using namespace std;
