@@ -17,10 +17,28 @@
 		"body": "for (int n - 1; i >= 0; i--) ",
 		"description": "cpp for backward"
 	},
+	"C++ pragma": {
+		"scope": "cpp",
+		"prefix": "prag!",
+		"body": "#ifdef ONLINE_JUDGE\n#pragma GCC optimize(\"Ofast,unroll-loops\")\n#endif\n",
+		"description": "cpp pragma for optimization"
+	},
 	"Python map int": {
 		"scope": "python",
 		"prefix": "map!",
 		"body": "map(int, input().split())",
 		"description": "map int"
-	}
+	},
+	"Python for": {
+		"scope": "python",
+		"prefix": "map!",
+		"body": "for i in range(n):",
+		"description": "python for"
+	},
+	"Python for backward": {
+		"scope": "python",
+		"prefix": "map!",
+		"body": "for i in range(n - 1, -1, -1):",
+		"description": "python for backward"
+	},
 }

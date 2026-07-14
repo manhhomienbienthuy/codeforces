@@ -9,10 +9,6 @@ cr() {
     echo " * https://codeforces.com/contest/${round}/problem/${1^^}" >> $R$1.cpp
     echo " */" >> $R$1.cpp
     echo "" >> $R$1.cpp
-    echo "#ifdef ONLINE_JUDGE" >> $R$1.cpp
-    echo "#pragma GCC optimize(\"Ofast,unroll-loops\")" >> $R$1.cpp
-    echo "#endif" >> $R$1.cpp
-    echo "" >> $R$1.cpp
     echo "#include <bits/stdc++.h>" >> $R$1.cpp
     echo "using namespace std;" >> $R$1.cpp
     echo "" >> $R$1.cpp
@@ -26,7 +22,7 @@ cr() {
     echo "    int n;" >> $R$1.cpp
     echo "    cin >> n;" >> $R$1.cpp
     echo "    vector<int> a(n);" >> $R$1.cpp
-    echo "    for (int i = 0; i < n; i++) cin >> a[i];" >> $R$1.cpp
+    echo "    for (auto& x : a) cin >> x;" >> $R$1.cpp
     echo "  }" >> $R$1.cpp
     echo "" >> $R$1.cpp
     echo "  return 0;" >> $R$1.cpp
