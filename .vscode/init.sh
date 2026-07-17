@@ -1,6 +1,12 @@
 read -p "Round #: " round
 export R=$round
 
+read -p "Create new folder (Y/n)? " yn
+if [ $yn = "Y" ] || [ $yn = "y" ]; then
+    mkdir -p "$(date +%Y)/$R"
+    cd "$(date +%Y)/$R"
+fi
+
 # create C++ template for problem A, B, C, ...
 cr() {
     echo "/*!" > $R$1.cpp

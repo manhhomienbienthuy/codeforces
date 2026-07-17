@@ -210,6 +210,81 @@ struct seg_tree {
   }
 };
 
+// literal encoding: lit(i, true)=2*i, lit(i, false)=2*i+1
+struct TwoSat {
+  int n;
+  vector<vector<int>> g, rg;
+  vector<int> ord, comp;
+  vector<bool> vis;
+
+  TwoSat(int n)
+      : n(n), g(2 * n), rg(2 * n), comp(2 * n, -1), vis(2 * n, false) {}
+
+  // add clause (x_u = f) OR (x_v = gv)
+  void add_clause(int u, bool f, int v, bool gv) {
+    // NOT lit(u,f) → lit(v,gv)  and  NOT lit(v,gv) → lit(u,f)
+    // NOT lit(i,b) = lit(i, !b) = 2*i + b (since lit(i,b) = 2*i + !b)
+    int nu = 2 * u + (int)f;    // literal for NOT(x_u=f)
+    int lv = 2 * v + (int)!gv;  // literal for (x_v=gv)
+    int nv = 2 * v + (int)gv;   // literal for NOT(x_v=gv)
+    int lu = 2 * u + (int)!f;   // literal for (x_u=f)
+    g[nu].push_back(lv);
+    g[nv].push_back(lu);
+    rg[lv].push_back(nu);
+    rg[lu].push_back(nv);
+  }
+
+  void dfs1(int s) {
+    stack<pair<int, int>> st;
+    st.push({s, 0});
+    vis[s] = true;
+    while (!st.empty()) {
+      auto& [v, idx] = st.top();
+      if (idx < (int)g[v].size()) {
+        int u = g[v][idx++];
+        if (!vis[u]) {
+          vis[u] = true;
+          st.push({u, 0});
+        }
+      } else {
+        ord.push_back(v);
+        st.pop();
+      }
+    }
+  }
+
+  void dfs2(int s, int c) {
+    stack<int> st;
+    st.push(s);
+    comp[s] = c;
+    while (!st.empty()) {
+      int v = st.top();
+      st.pop();
+      for (int u : rg[v])
+        if (comp[u] < 0) {
+          comp[u] = c;
+          st.push(u);
+        }
+    }
+  }
+
+  bool solve(vector<bool>& val) {
+    for (int i = 0; i < 2 * n; i++)
+      if (!vis[i]) dfs1(i);
+    int c = 0;
+    for (int i = 2 * n - 1; i >= 0; i--)
+      if (comp[ord[i]] < 0) dfs2(ord[i], c++);
+    val.resize(n);
+    for (int i = 0; i < n; i++) {
+      if (comp[2 * i] == comp[2 * i + 1]) return false;
+      // x_i = true if its "true literal" (2*i) has higher topo order (higher
+      // comp)
+      val[i] = comp[2 * i] > comp[2 * i + 1];
+    }
+    return true;
+  }
+};
+
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
