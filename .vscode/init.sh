@@ -15,25 +15,7 @@ cr() {
     echo " * https://codeforces.com/contest/${round}/problem/${1^^}" >> $R$1.cpp
     echo " */" >> $R$1.cpp
     echo "" >> $R$1.cpp
-    echo "#include <bits/stdc++.h>" >> $R$1.cpp
-    echo "using namespace std;" >> $R$1.cpp
-    echo "" >> $R$1.cpp
-    echo "int main() {" >> $R$1.cpp
-    echo "  ios::sync_with_stdio(false);" >> $R$1.cpp
-    echo "  cin.tie(nullptr);" >> $R$1.cpp
-    echo "" >> $R$1.cpp
-    echo "  int t;" >> $R$1.cpp
-    echo "  cin >> t;" >> $R$1.cpp
-    echo "  while (t--) {" >> $R$1.cpp
-    echo "    int n;" >> $R$1.cpp
-    echo "    cin >> n;" >> $R$1.cpp
-    echo "    vector<int> a(n);" >> $R$1.cpp
-    echo "    for (auto& x : a) cin >> x;" >> $R$1.cpp
-    echo "  }" >> $R$1.cpp
-    echo "" >> $R$1.cpp
-    echo "  return 0;" >> $R$1.cpp
-    echo "}" >> $R$1.cpp
-
+    cat ../../template.cpp >> $R$1.cpp
 }
 
 # create Python template for problem A, B, C, ...
@@ -42,14 +24,7 @@ crp() {
     echo "# created: $(date -u -Iseconds)" >> $R$1.py
     echo "# https://codeforces.com/contest/${round}/problem/${1^^}" >> $R$1.py
     echo "" >> $R$1.py
-    echo "import sys" >> $R$1.py
-    echo "input = sys.stdin.readline" >> $R$1.py
-    echo "" >> $R$1.py
-    echo "t = int(input())" >> $R$1.py
-    echo "for _ in range(t):" >> $R$1.py
-    echo "    n = int(input())" >> $R$1.py
-    echo "    a = list(map(int, input().split()))" >> $R$1.py
-
+    cat ../../template.py >> $R$1.py
 }
 
 run() {

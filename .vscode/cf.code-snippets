@@ -31,13 +31,13 @@
 	},
 	"Python for": {
 		"scope": "python",
-		"prefix": "map!",
+		"prefix": "for!",
 		"body": "for i in range(n):",
 		"description": "python for"
 	},
 	"Python for backward": {
 		"scope": "python",
-		"prefix": "map!",
+		"prefix": "forb!",
 		"body": "for i in range(n - 1, -1, -1):",
 		"description": "python for backward"
 	},
