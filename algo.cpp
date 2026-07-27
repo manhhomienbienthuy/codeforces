@@ -107,6 +107,7 @@ struct rolling_hash {
 
   rolling_hash(const string& s) {
     n = (int)s.size();
+
     h1.assign(n + 1, 0);
     h2.assign(n + 1, 0);
     p1.assign(n + 1, 1);
@@ -114,29 +115,36 @@ struct rolling_hash {
 
     for (int i = 0; i < n; i++) {
       int x = s[i];
-      h1[i + 1] = (1ll * h1[i] * BASE1 + x) % MOD1;
-      h2[i + 1] = (1ll * h2[i] * BASE2 + x) % MOD2;
-      p1[i + 1] = (1ll * p1[i] * BASE1) % MOD1;
-      p2[i + 1] = (1ll * p2[i] * BASE2) % MOD2;
+
+      h1[i + 1] = (int)((1ll * h1[i] * BASE1 + x) % MOD1);
+      h2[i + 1] = (int)((1ll * h2[i] * BASE2 + x) % MOD2);
+
+      p1[i + 1] = (int)((1ll * p1[i] * BASE1) % MOD1);
+      p2[i + 1] = (int)((1ll * p2[i] * BASE2) % MOD2);
     }
   }
 
   pair<int, int> get(int l, int r) const {
-    int x1 = (h1[r] - 1ll * h1[l] * p1[r - l] % MOD1 + MOD1) % MOD1;
-    int x2 = (h2[r] - 1ll * h2[l] * p2[r - l] % MOD2 + MOD2) % MOD2;
+    int x1 = (int)((h1[r] - 1ll * h1[l] * p1[r - l] % MOD1 + MOD1) % MOD1);
+
+    int x2 = (int)((h2[r] - 1ll * h2[l] * p2[r - l] % MOD2 + MOD2) % MOD2);
+
     return {x1, x2};
   }
 };
 
-int lcp(const rolling_hash& rh, int a, int b, int maxLen) {
-  int lo = 0, hi = maxLen;
+int lcp(const rolling_hash& rh, int a, int b, int mx) {
+  int lo = 0, hi = mx;
+
   while (lo < hi) {
     int mid = (lo + hi + 1) / 2;
+
     if (rh.get(a, a + mid) == rh.get(b, b + mid))
       lo = mid;
     else
       hi = mid - 1;
   }
+
   return lo;
 }
 
