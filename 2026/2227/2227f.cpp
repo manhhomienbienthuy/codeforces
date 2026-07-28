@@ -13,21 +13,26 @@ struct fenwick {
 
   fenwick(int n_) : n(n_), bit(n + 1, 0) {}
 
-  void add(int p, int64_t v) {
-    for (; p <= n; p += p & -p) {
-      bit[p] += v;
+  void add(int idx, int64_t val) {
+    for (; idx <= n; idx += idx & -idx) {
+      bit[idx] += val;
     }
   }
 
-  int64_t sum(int p) const {
+  int64_t sum(int idx) {
     int64_t res = 0;
-    for (; p > 0; p -= p & -p) {
-      res += bit[p];
+
+    for (; idx > 0; idx -= idx & -idx) {
+      res += bit[idx];
     }
+
     return res;
   }
 
-  int64_t sum(int l, int r) const { return sum(r) - sum(l - 1); }
+  int64_t query(int l, int r) {
+    if (l > r) return 0;
+    return sum(r) - (l ? sum(l - 1) : 0);
+  }
 };
 
 int main() {
@@ -60,11 +65,11 @@ int main() {
     for (int x : a) {
       int id = gid(x);
 
-      int64_t cnt_gt = bit_cnt.sum(id + 1, m);
-      int64_t sum_gt = bit_sum.sum(id + 1, m);
+      int64_t cnt_gt = bit_cnt.query(id + 1, m);
+      int64_t sum_gt = bit_sum.query(id + 1, m);
 
       ans += sum_gt - cnt_gt * x;
-      d = max(d, bit_cnt.sum(id, m));
+      d = max(d, bit_cnt.query(id, m));
 
       bit_cnt.add(id, 1);
       bit_sum.add(id, x);

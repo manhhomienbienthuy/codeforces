@@ -66,8 +66,8 @@ int lcs(vector<int>& s1, vector<int>& s2) {
   vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
 
   // Building dp[m+1][n+1] in bottom-up fashion
-  for (int i = 1; i <= n; ++i) {
-    for (int j = 1; j <= m; ++j) {
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= m; j++) {
       if (s1[i - 1] == s2[j - 1])
         dp[i][j] = dp[i - 1][j - 1] + 1;
       else
@@ -93,6 +93,7 @@ int find_lis(const vector<int>& a) {
       dp[pos] = i;
     }
   }
+
   return dp.size();
 }
 
@@ -154,21 +155,26 @@ struct fenwick {
 
   fenwick(int n_) : n(n_), bit(n + 1, 0) {}
 
-  void add(int p, int64_t v) {
-    for (; p <= n; p += p & -p) {
-      bit[p] += v;
+  void add(int idx, int64_t val) {
+    for (; idx <= n; idx += idx & -idx) {
+      bit[idx] += val;
     }
   }
 
-  int64_t sum(int p) const {
+  int64_t sum(int idx) {
     int64_t res = 0;
-    for (; p > 0; p -= p & -p) {
-      res += bit[p];
+
+    for (; idx > 0; idx -= idx & -idx) {
+      res += bit[idx];
     }
+
     return res;
   }
 
-  int64_t sum(int l, int r) const { return sum(r) - sum(l - 1); }
+  int64_t query(int l, int r) {
+    if (l > r) return 0;
+    return sum(r) - (l ? sum(l - 1) : 0);
+  }
 };
 
 struct FastHash {
@@ -188,35 +194,356 @@ struct FastHash {
 
 struct seg_tree {
   int n;
-  vector<int64_t> st;
+  vector<int> st;
 
-  seg_tree(int sz) {
-    n = 1;
-    while (n < sz) n <<= 1;
-    st.assign(2 * n, 0);
+  seg_tree(int n) : n(n), st(4 * n, 0) {}
+
+  void update(int v, int l, int r, int pos, int val) {
+    if (l == r) {
+      st[v] = val;
+      return;
+    }
+
+    int m = (l + r) >> 1;
+
+    if (pos <= m) {
+      update(v << 1, l, m, pos, val);
+    } else {
+      update(v << 1 | 1, m + 1, r, pos, val);
+    }
+
+    st[v] = max(st[v << 1], st[v << 1 | 1]);
   }
 
-  void update(int p, int64_t v) {
-    p += n - 1;
-    st[p] = max(st[p], v);
-    for (p >>= 1; p; p >>= 1) {
-      st[p] = max(st[p << 1], st[p << 1 | 1]);
+  int query(int v, int l, int r, int ql, int qr) {
+    if (ql > r || qr < l) {
+      return INT_MIN;
+    }
+
+    if (ql <= l && r <= qr) {
+      return st[v];
+    }
+
+    int m = (l + r) >> 1;
+
+    return max(query(v << 1, l, m, ql, qr),
+               query(v << 1 | 1, m + 1, r, ql, qr));
+  }
+};
+
+struct lazy_seg {
+  int n;
+  vector<int64_t> mx, lazy;
+
+  lazy_seg(int n_) : n(n_), mx(4 * n), lazy(4 * n) {}
+
+  void apply(int v, int64_t val) {
+    mx[v] += val;
+    lazy[v] += val;
+  }
+
+  void push(int v) {
+    if (lazy[v] == 0) return;
+
+    apply(v << 1, lazy[v]);
+    apply(v << 1 | 1, lazy[v]);
+
+    lazy[v] = 0;
+  }
+
+  void add(int v, int l, int r, int ql, int qr, int64_t val) {
+    if (ql > r || qr < l) return;
+
+    if (ql <= l && r <= qr) {
+      apply(v, val);
+      return;
+    }
+
+    push(v);
+
+    int m = (l + r) >> 1;
+
+    add(v << 1, l, m, ql, qr, val);
+    add(v << 1 | 1, m + 1, r, ql, qr, val);
+
+    mx[v] = max(mx[v << 1], mx[v << 1 | 1]);
+  }
+
+  int64_t query(int v, int l, int r, int ql, int qr) {
+    if (ql > r || qr < l) {
+      return INT64_MIN;
+    }
+
+    if (ql <= l && r <= qr) {
+      return mx[v];
+    }
+
+    push(v);
+
+    int m = (l + r) >> 1;
+
+    return max(query(v << 1, l, m, ql, qr),
+               query(v << 1 | 1, m + 1, r, ql, qr));
+  }
+};
+
+struct dsu {
+  vector<int> p, sz;
+
+  dsu(int n) : p(n), sz(n, 1) { iota(p.begin(), p.end(), 0); }
+
+  int find(int v) {
+    if (p[v] == v) {
+      return v;
+    }
+
+    return p[v] = find(p[v]);
+  }
+
+  bool unite(int a, int b) {
+    a = find(a);
+    b = find(b);
+
+    if (a == b) {
+      return false;
+    }
+
+    if (sz[a] < sz[b]) {
+      swap(a, b);
+    }
+
+    p[b] = a;
+    sz[a] += sz[b];
+
+    return true;
+  }
+};
+
+vector<int64_t> dijkstra(int n, vector<vector<pair<int, int>>>& g, int src) {
+  vector<int64_t> dist(n, INT64_MAX);
+
+  priority_queue<pair<int64_t, int>, vector<pair<int64_t, int>>, greater<>> pq;
+
+  dist[src] = 0;
+  pq.push({0, src});
+
+  while (!pq.empty()) {
+    auto [d, v] = pq.top();
+    pq.pop();
+
+    if (d != dist[v]) continue;
+
+    for (auto [to, w] : g[v]) {
+      if (dist[to] > d + w) {
+        dist[to] = d + w;
+        pq.push({dist[to], to});
+      }
     }
   }
 
-  int64_t query(int l, int r, int x, int lx, int rx) {
-    if (r < lx || rx < l) return 0;
-    if (l <= lx && rx <= r) return st[x];
+  return dist;
+}
 
-    int m = (lx + rx) >> 1;
-    return max(query(l, r, x << 1, lx, m), query(l, r, x << 1 | 1, m + 1, rx));
+// KMP prefix
+vector<int> prefix_func(const string& s) {
+  int n = (int)s.size();
+
+  vector<int> pi(n);
+
+  for (int i = 1, j = 0; i < n; i++) {
+    while (j > 0 && s[i] != s[j]) {
+      j = pi[j - 1];
+    }
+
+    if (s[i] == s[j]) {
+      j++;
+    }
+
+    pi[i] = j;
   }
 
-  int64_t query(int l, int r) {
-    if (l > r) return 0;
-    return query(l, r, 1, 1, n);
+  return pi;
+}
+
+// z function
+vector<int> z_func(const string& s) {
+  int n = (int)s.size();
+
+  vector<int> z(n);
+
+  for (int i = 1, l = 0, r = 0; i < n; i++) {
+    if (i <= r) {
+      z[i] = min(r - i + 1, z[i - l]);
+    }
+
+    while (i + z[i] < n && s[z[i]] == s[i + z[i]]) {
+      z[i]++;
+    }
+
+    if (i + z[i] - 1 > r) {
+      l = i;
+      r = i + z[i] - 1;
+    }
+  }
+
+  return z;
+}
+
+// RMQ min ver
+struct sparse_table {
+  int n, lg;
+  vector<int> lg2;
+  vector<vector<int>> st;
+
+  sparse_table(const vector<int>& a) {
+    n = (int)a.size();
+
+    lg2.resize(n + 1);
+    lg2[1] = 0;
+
+    for (int i = 2; i <= n; i++) {
+      lg2[i] = lg2[i / 2] + 1;
+    }
+
+    lg = lg2[n] + 1;
+
+    st.assign(lg, vector<int>(n));
+
+    st[0] = a;
+
+    for (int k = 1; k < lg; k++) {
+      for (int i = 0; i + (1 << k) <= n; i++) {
+        st[k][i] = min(st[k - 1][i], st[k - 1][i + (1 << (k - 1))]);
+      }
+    }
+  }
+
+  int query(int l, int r) {
+    int k = lg2[r - l + 1];
+
+    return min(st[k][l], st[k][r - (1 << k) + 1]);
   }
 };
+
+// LCA (Binary Lifting)
+struct lca_tree {
+  int n, lg;
+  vector<int> dep;
+  vector<vector<int>> up;
+  vector<vector<int>> g;
+
+  lca_tree(int n) : n(n) {
+    lg = 1;
+
+    while ((1 << lg) <= n) {
+      lg++;
+    }
+
+    dep.assign(n, 0);
+    up.assign(lg, vector<int>(n));
+    g.assign(n, vector<int>());
+  }
+
+  void add_edge(int u, int v) {
+    g[u].push_back(v);
+    g[v].push_back(u);
+  }
+
+  void dfs(int v, int p) {
+    up[0][v] = p;
+
+    for (int k = 1; k < lg; k++) {
+      up[k][v] = up[k - 1][up[k - 1][v]];
+    }
+
+    for (int to : g[v]) {
+      if (to == p) {
+        continue;
+      }
+
+      dep[to] = dep[v] + 1;
+
+      dfs(to, v);
+    }
+  }
+
+  void build(int root = 0) { dfs(root, root); }
+
+  int kth(int v, int k) {
+    for (int i = 0; i < lg; i++) {
+      if (k & (1 << i)) {
+        v = up[i][v];
+      }
+    }
+
+    return v;
+  }
+
+  int lca(int a, int b) {
+    if (dep[a] < dep[b]) {
+      swap(a, b);
+    }
+
+    a = kth(a, dep[a] - dep[b]);
+
+    if (a == b) {
+      return a;
+    }
+
+    for (int i = lg - 1; i >= 0; i--) {
+      if (up[i][a] != up[i][b]) {
+        a = up[i][a];
+        b = up[i][b];
+      }
+    }
+
+    return up[0][a];
+  }
+
+  int dist(int a, int b) {
+    int c = lca(a, b);
+
+    return dep[a] + dep[b] - 2 * dep[c];
+  }
+};
+
+// Topological Sort (Kahn's Algorithm)
+vector<int> topo_sort(int n, vector<vector<int>>& g) {
+  vector<int> indeg(n);
+
+  for (int v = 0; v < n; v++) {
+    for (int to : g[v]) {
+      indeg[to]++;
+    }
+  }
+
+  queue<int> q;
+
+  for (int i = 0; i < n; i++) {
+    if (indeg[i] == 0) {
+      q.push(i);
+    }
+  }
+
+  vector<int> ord;
+
+  while (!q.empty()) {
+    int v = q.front();
+    q.pop();
+
+    ord.push_back(v);
+
+    for (int to : g[v]) {
+      indeg[to]--;
+
+      if (indeg[to] == 0) {
+        q.push(to);
+      }
+    }
+  }
+
+  return ord;
+}
 
 // literal encoding: lit(i, true)=2*i, lit(i, false)=2*i+1
 struct TwoSat {
@@ -317,16 +644,31 @@ int main() {
       return int(lower_bound(vals.begin(), vals.end(), x) - vals.begin()) + 1;
     };
 
-    int64_t ans = 1e18;
-    int i = 0;
-    while (i < n) {
-      int j = i;
-      while (j < n && a[i] == a[j]) j++;
-      ans = min(ans, 1ll * a[i] * (n - j + i));
-      i = j;
-    }
+    /*
+    Monotonic Queue
+    Useful for:
+    - Sliding window minimum
+    - Sliding window maximum
+    - DP optimizations
+    */
+    deque<int> dq;
+    int k;
 
-    cout << ans << '\n';
+    for (int i = 0; i < n; i++) {
+      while (!dq.empty() && a[dq.back()] >= a[i]) {
+        dq.pop_back();
+      }
+
+      dq.push_back(i);
+
+      while (!dq.empty() && dq.front() <= i - k) {
+        dq.pop_front();
+      }
+
+      if (i >= k - 1) {
+        int mn = a[dq.front()];
+      }
+    }
   }
 
   return 0;
