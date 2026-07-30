@@ -39,7 +39,8 @@ int main() {
 
         if (i >= k) dp[i] = dp[i - k];
 
-        int cur = i % k ? dp[i - 1] + (a[i] >= mid) : a[i] >= mid;
+        int cur = a[i] >= mid;
+        if (i % k) cur += dp[i - 1];
 
         dp[i] = max(dp[i], cur);
       }

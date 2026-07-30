@@ -1,6 +1,13 @@
 read -p "Round #: " round
 export R=$round
 
+read -p "Is this contest (Y/n)? " yn
+if [ $yn = "Y" ] || [ $yn = "y" ]; then
+    export T=contest
+else
+    export T=gym
+fi
+
 read -p "Create new folder (Y/n)? " yn
 if [ $yn = "Y" ] || [ $yn = "y" ]; then
     mkdir -p "$(date +%Y)/$R"
@@ -12,7 +19,7 @@ cr() {
     echo "/*!" > $R$1.cpp
     echo " * author: manhhomienbienthuy" >> $R$1.cpp
     echo " * created: $(date -u -Iseconds)" >> $R$1.cpp
-    echo " * https://codeforces.com/contest/${round}/problem/${1^^}" >> $R$1.cpp
+    echo " * https://codeforces.com/${T}/${round}/problem/${1^^}" >> $R$1.cpp
     echo " */" >> $R$1.cpp
     echo "" >> $R$1.cpp
     cat ../../template.cpp >> $R$1.cpp
@@ -22,7 +29,7 @@ cr() {
 crp() {
     echo "# author: manhhomienbienthuy" > $R$1.py
     echo "# created: $(date -u -Iseconds)" >> $R$1.py
-    echo "# https://codeforces.com/contest/${round}/problem/${1^^}" >> $R$1.py
+    echo "# https://codeforces.com/${T}/${round}/problem/${1^^}" >> $R$1.py
     echo "" >> $R$1.py
     cat ../../template.py >> $R$1.py
 }

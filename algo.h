@@ -135,18 +135,36 @@ struct fenwick {
   fenwick(int n) : n(n), bit(n + 1, 0) {}
 
   void add(int i, int64_t v) {
-    for (; i <= n; i += i & -i) bit[i] += v;
+    for (i++; i <= n; i += i & -i) bit[i] += v;
   }
 
   int64_t sum(int i) {
     int64_t r = 0;
-    for (; i > 0; i -= i & -i) r += bit[i];
+    for (i++; i > 0; i -= i & -i) r += bit[i];
     return r;
   }
 
   int64_t query(int l, int r) {
     if (l > r) return 0;
     return sum(r) - sum(l - 1);
+  }
+
+  int kth(int k) {
+    int pos = 0;
+
+    int pw = 1;
+    while ((pw << 1) <= n) pw <<= 1;
+
+    for (; pw; pw >>= 1) {
+      int nxt = pos + pw;
+
+      if (nxt <= n && bit[nxt] < k) {
+        k -= bit[nxt];
+        pos = nxt;
+      }
+    }
+
+    return pos;
   }
 };
 
