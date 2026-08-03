@@ -323,6 +323,8 @@ vector<int> prefix_func(const string& s) {
 }
 
 // z function
+// For a position k, how many characters from the prefix of s match the
+// substring starting at k?
 vector<int> z_func(const string& s) {
   int n = (int)s.size();
 

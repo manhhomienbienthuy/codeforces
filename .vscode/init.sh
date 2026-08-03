@@ -34,10 +34,12 @@ crp() {
     cat ../../template.py >> $R$1.py
 }
 
+# Run C++ solution for problem A, B, C, ...
 run() {
-    g++ -Wall -Wextra -Winvalid-pch -Wconversion -static -O2 -std=c++23 $1 && ./a.exe < input.txt
+    g++ -Wall -Wextra -Winvalid-pch -Wconversion -static -O2 -std=c++23 $R$1.cpp && ./a.exe < input.txt
 }
 
+# git commit
 cm() {
     git add -A && git commit -m "$(date -Iseconds)" && git push origin main
 }
