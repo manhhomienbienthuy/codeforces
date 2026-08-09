@@ -36,7 +36,7 @@ crp() {
 
 # Run C++ solution for problem A, B, C, ...
 run() {
-    g++ -Wall -Wextra -Winvalid-pch -Wconversion -static -O2 -std=c++23 $R$1.cpp && ./a.exe < input.txt
+    g++ -Wall -Wextra -Winvalid-pch -Wconversion -static -O2 -std=c++23 $R$1.cpp && ./a.exe < input
 }
 
 # git commit
