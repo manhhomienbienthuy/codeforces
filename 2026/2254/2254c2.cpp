@@ -20,54 +20,36 @@ int main() {
     cin >> n >> a >> b;
 
     int64_t ans = 0;
-    deque<pair<int, bool>> dq;
+    bool ok = true;
 
-    for (int i = 0; i < n; i += 2) {
-      if (a[i] == '1' && b[i] == '0') {
-        if (dq.empty() || dq.front().second)
-          dq.push_back({i, true});
-        else {
-          ans += abs(i - dq.front().first) / 2;
-          dq.pop_front();
-        }
-      } else if (a[i] == '0' && b[i] == '1') {
-        if (dq.empty() || !dq.front().second)
-          dq.push_back({i, false});
-        else {
-          ans += abs(i - dq.front().first) / 2;
-          dq.pop_front();
-        }
-      }
-    }
+    for (int s = 0; ok && s < 2; s++) {
+      deque<pair<int, bool>> dq;
 
-    if (!dq.empty()) {
-      cout << -1 << '\n';
-      continue;
-    }
-
-    for (int i = 1; i < n; i += 2) {
-      if (a[i] == '1' && b[i] == '0') {
-        if (dq.empty() || dq.front().second)
-          dq.push_back({i, true});
-        else {
-          ans += abs(i - dq.front().first) / 2;
-          dq.pop_front();
-        }
-      } else if (a[i] == '0' && b[i] == '1') {
-        if (dq.empty() || !dq.front().second)
-          dq.push_back({i, false});
-        else {
-          ans += abs(i - dq.front().first) / 2;
-          dq.pop_front();
+      for (int i = s; i < n; i += 2) {
+        if (a[i] == '1' && b[i] == '0') {
+          if (dq.empty() || dq.front().second)
+            dq.push_back({i, true});
+          else {
+            ans += abs(i - dq.front().first) / 2;
+            dq.pop_front();
+          }
+        } else if (a[i] == '0' && b[i] == '1') {
+          if (dq.empty() || !dq.front().second)
+            dq.push_back({i, false});
+          else {
+            ans += abs(i - dq.front().first) / 2;
+            dq.pop_front();
+          }
         }
       }
+
+      ok = dq.empty();
     }
 
-    if (!dq.empty()) {
+    if (!ok)
       cout << -1 << '\n';
-      continue;
-    }
-    cout << ans << '\n';
+    else
+      cout << ans << '\n';
   }
 
   return 0;

@@ -19,22 +19,22 @@ int main() {
     string a, b;
     cin >> n >> a >> b;
 
-    int odd = 0, even = 0;
-    for (int i = 0; i < n; i += 2) {
-      if (a[i] == '1' && b[i] == '0')
-        even++;
-      else if (a[i] == '0' && b[i] == '1')
-        even--;
+    bool ok = true;
+
+    for (int s = 0; ok && s < 2; s++) {
+      int cnt = 0;
+
+      for (int i = s; i < n; i += 2) {
+        if (a[i] == '1' && b[i] == '0')
+          cnt++;
+        else if (a[i] == '0' && b[i] == '1')
+          cnt--;
+      }
+
+      ok = !cnt;
     }
 
-    for (int i = 1; i < n; i += 2) {
-      if (a[i] == '1' && b[i] == '0')
-        odd++;
-      else if (a[i] == '0' && b[i] == '1')
-        odd--;
-    }
-
-    cout << (!odd && !even ? "YES\n" : "NO\n");
+    cout << (ok ? "YES\n" : "NO\n");
   }
 
   return 0;
