@@ -37,9 +37,9 @@ int main() {
         one = two = true;
         break;
       } else if (segs[i + 1].second > 1) {
-        one = !i || segs[i - 1].first != segs[i + 1].first;
+        one = one || !i || segs[i - 1].first != segs[i + 1].first;
       } else if (segs[i].second > 1) {
-        one = i == m - 2 || segs[i].first != segs[i + 2].first;
+        one = one || i == m - 2 || segs[i].first != segs[i + 2].first;
       }
     }
 
