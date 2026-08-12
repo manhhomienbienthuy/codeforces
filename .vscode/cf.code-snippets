@@ -11,17 +11,41 @@
 		"body": "for (int i = 0; i < n; i++) ",
 		"description": "cpp for"
 	},
+	"C++ for from 1 to n": {
+		"scope": "cpp",
+		"prefix": "for1!",
+		"body": "for (int i = 1; i <= n; i++) ",
+		"description": "cpp for from 1 to n"
+	},
 	"C++ for backward": {
 		"scope": "cpp",
 		"prefix": "forb!",
 		"body": "for (int n - 1; i >= 0; i--) ",
 		"description": "cpp for backward"
 	},
+	"C++ for backward from n downto 1": {
+		"scope": "cpp",
+		"prefix": "forb1!",
+		"body": "for (int n; i > 0; i--) ",
+		"description": "cpp for backward from n downto 1"
+	},
 	"C++ pragma": {
 		"scope": "cpp",
 		"prefix": "prag!",
-		"body": "#ifdef ONLINE_JUDGE\n#pragma GCC optimize(\"Ofast,unroll-loops\")\n#endif\n",
+		"body": [
+			"#ifdef ONLINE_JUDGE",
+			"#pragma GCC optimize(\"Ofast,unroll-loops\")",
+			"#endif\n"],
 		"description": "cpp pragma for optimization"
+	},
+	"C++ print array" : {
+		"scope": "cpp",
+		"prefix": "print!",
+		"body": [
+			"for (auto x : $1) cout << x << ' ';",
+			"cout << '\\n';"
+		],
+		"description": "cpp print array"
 	},
 	"Python map int": {
 		"scope": "python",

@@ -18,17 +18,16 @@ int main() {
     int n;
     cin >> n;
 
-    vector<int64_t> a(n);
-    for (int64_t& x : a) cin >> x;
-
-    vector<int64_t> d(n), ans(n);
-
-    ans[0] = a[0];
+    vector<int> a(n), d(n);
+    for (int& x : a) cin >> x;
 
     for (int i = 1; i < n; i++) d[i] = a[i] - a[i - 1];
 
+    vector<int64_t> ans(n);
+    ans[0] = a[0];
+
     for (int l = 1, r; l < n; l = r + 1) {
-      for (r = l; r < n - 1 && (a[r - 1] & 1LL) == (a[r + 1] & 1LL); r++);
+      for (r = l; r < n - 1 && (a[r - 1] & 1) == (a[r + 1] & 1); r++);
 
       sort(d.begin() + l, d.begin() + r + 1);
 

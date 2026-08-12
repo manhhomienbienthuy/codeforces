@@ -21,17 +21,6 @@ int64_t pw(int64_t a, int64_t p, int64_t m = MOD) {
   return r;
 }
 
-// Get MSB
-int64_t msb(int64_t n) {
-  n |= n >> 1;
-  n |= n >> 2;
-  n |= n >> 4;
-  n |= n >> 8;
-  n |= n >> 16;
-  n |= n >> 32;
-  return (n >> 1) + 1;
-}
-
 const int MAX = 510000;
 int64_t fac[MAX], finv[MAX], inv_[MAX];
 
