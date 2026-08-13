@@ -21,23 +21,16 @@ int main() {
     int64_t n;
     cin >> n;
 
-    // dp[c_less][a_less][need]
-    // c_less: c prefix < n prefix
-    // a_less: a prefix < c prefix
-    // need: value of a[i] & c[i] (= a[i-1] ^ c[i-1])
-    vector dp(2, vector(2, vector<int64_t>(2, 0)));
-    dp[0][0][0] = 1;
+    vector dp(62, vector(2, vector(2, vector<int64_t>(2, 0))));
+    dp[61][0][0][0] = 1;
 
     for (int i = 60; i >= 0; i--) {
       int ni = (n >> i) & 1;
-      vector ndp(2, vector(2, vector<int64_t>(2, 0)));
 
       for (int c_less = 0; c_less < 2; c_less++) {
         for (int a_less = 0; a_less < 2; a_less++) {
           for (int need = 0; need < 2; need++) {
-            if (!dp[c_less][a_less][need]) continue;
-
-            int64_t cur = dp[c_less][a_less][need];
+            if (!dp[i + 1][c_less][a_less][need]) continue;
 
             for (int ai = 0; ai < 2; ai++) {
               for (int ci = 0; ci < 2; ci++) {
@@ -49,17 +42,15 @@ int main() {
                 int na = a_less || (ai < ci);
                 int nn = ai ^ ci;
 
-                ndp[nc][na][nn] += cur;
+                dp[i][nc][na][nn] += dp[i + 1][c_less][a_less][need];
               }
             }
           }
         }
       }
-
-      dp = move(ndp);
     }
 
-    int64_t ans = (dp[0][1][0] + dp[1][1][0]) % MOD;
+    int64_t ans = (dp[0][0][1][0] + dp[0][1][1][0]) % MOD;
     cout << ans << '\n';
   }
 
