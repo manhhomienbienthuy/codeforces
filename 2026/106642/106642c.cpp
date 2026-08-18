@@ -39,19 +39,19 @@ int main() {
       vector<state> cur;
       cur.push_back({x, x, 1});
 
-      for (auto& s : prev) {
-        int nxt_or = s.or_val | x;
-        int nxt_and = s.and_val & x;
+      ans += !k;
 
-        if (cur.back().or_val == nxt_or && cur.back().and_val == nxt_and) {
+      for (auto& s : prev) {
+        int cur_or = s.or_val | x;
+        int cur_and = s.and_val & x;
+
+        if (cur.back().or_val == cur_or && cur.back().and_val == cur_and) {
           cur.back().cnt += s.cnt;
         } else {
-          cur.push_back({nxt_or, nxt_and, s.cnt});
+          cur.push_back({cur_or, cur_and, s.cnt});
         }
-      }
 
-      for (auto& s : cur) {
-        if (__builtin_popcount(s.or_val ^ s.and_val) == k) ans += s.cnt;
+        if (__builtin_popcount(cur_or ^ cur_and) == k) ans += s.cnt;
       }
 
       prev = move(cur);

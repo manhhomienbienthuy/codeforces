@@ -20,13 +20,13 @@
 	"C++ for backward": {
 		"scope": "cpp",
 		"prefix": "forb!",
-		"body": "for (int n - 1; i >= 0; i--) ",
+		"body": "for (int i = n - 1; i >= 0; i--) ",
 		"description": "cpp for backward"
 	},
 	"C++ for backward from n downto 1": {
 		"scope": "cpp",
 		"prefix": "forb1!",
-		"body": "for (int n; i > 0; i--) ",
+		"body": "for (int i = n; i > 0; i--) ",
 		"description": "cpp for backward from n downto 1"
 	},
 	"C++ pragma": {
