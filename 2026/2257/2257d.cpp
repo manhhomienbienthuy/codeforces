@@ -43,13 +43,15 @@ int main() {
               1;
 
       if (r <= l) {
-        cout << x * y << '\n';
+        cout << x * y;
       } else {
         int64_t left = x * div[l], mid = pref[r - 1] - pref[l],
                 right = (y - div[r - 1]) * (S / div[r]);
 
-        cout << left + mid + right << '\n';
+        cout << left + mid + right;
       }
+
+      cout << '\n';
     }
   }
 

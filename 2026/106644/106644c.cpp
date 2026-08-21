@@ -8,9 +8,9 @@
 using namespace std;
 
 struct dsu {
-  vector<int> p, sz;
+  vector<int> p;
 
-  dsu(int n) : p(n), sz(n, 1) { iota(p.begin(), p.end(), 0); }
+  dsu(int n) : p(n) { iota(p.begin(), p.end(), 0); }
 
   int find(int v) {
     while (p[v] != v) v = p[v] = p[p[v]];
@@ -23,10 +23,7 @@ struct dsu {
 
     if (a == b) return false;
 
-    if (sz[a] < sz[b]) swap(a, b);
-
     p[b] = a;
-    sz[a] += sz[b];
 
     return true;
   }
@@ -63,7 +60,7 @@ int main() {
   set<int> rem;
   for (int v = 1; v <= n; v++) rem.insert(v);
 
-  int cid = 0;
+  int cid = 0, cc = 0;
 
   for (int s = 1; s <= n; s++) {
     if (white[s] != -1) continue;
@@ -80,12 +77,14 @@ int main() {
       int v = q.front();
       q.pop();
 
-      for (int to : g[v]) mark[to] = cid;
+      cc++;
+
+      for (int to : g[v]) mark[to] = cc;
 
       for (auto it = rem.begin(); it != rem.end();) {
         int u = *it;
 
-        if (mark[u] != cid) {
+        if (mark[u] != cc) {
           white[u] = cid;
           q.push(u);
           it = rem.erase(it);
