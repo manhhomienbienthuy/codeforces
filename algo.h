@@ -239,6 +239,14 @@ struct lazy_seg {
     mx[v] = max(mx[v << 1], mx[v << 1 | 1]);
   }
 
+  void add(int l, int r, int val) {
+    if (l > r) {
+      return;
+    }
+
+    add(1, 0, n - 1, l, r, val);
+  }
+
   int64_t query(int v, int l, int r, int ql, int qr) {
     if (ql > r || qr < l) return INT64_MIN;
 
@@ -250,6 +258,8 @@ struct lazy_seg {
     return max(query(v << 1, l, m, ql, qr),
                query(v << 1 | 1, m + 1, r, ql, qr));
   }
+
+  int64_t query(int l, int r) { return query(1, 0, n - 1, l, r); }
 };
 
 struct dsu {
