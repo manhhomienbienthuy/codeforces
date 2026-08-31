@@ -26,21 +26,15 @@ int main() {
       cnt[x]++;
     }
 
-    vector<int> suf_cnt(m + 2), suf_max(m + 2);
+    vector<int> suf(m + 2);
 
-    for (int i = m; i >= 1; i--) {
-      suf_cnt[i] = suf_cnt[i + 1] + cnt[i];
-      suf_max[i] = max(suf_max[i + 1], cnt[i]);
-    }
+    for (int i = m; i >= 1; i--) suf[i] = suf[i + 1] + cnt[i];
 
     int ans = 0;
 
     for (int d = 1; d <= m; d++) {
-      int cur = cnt[d] + suf_cnt[d + 1];
-      if (2 * d <= m) cur += cnt[2 * d];
+      int cur = suf[d] + (2 * d <= m ? cnt[2 * d] : 0);
       ans = max(ans, cur);
-
-      ans = max(ans, cnt[d] + suf_max[d + 1]);
     }
 
     cout << ans << '\n';

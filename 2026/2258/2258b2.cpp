@@ -22,10 +22,10 @@ int main() {
     int64_t tot = 0;
 
     for (int i = 0; i < n; i++) {
-      int a;
-      cin >> a;
-      cnt[a]++;
-      tot += a;
+      int x;
+      cin >> x;
+      cnt[x]++;
+      tot += x;
     }
 
     vector<int> pref(m + 1);
@@ -35,13 +35,11 @@ int main() {
     vector<int64_t> sum(m + 1);
 
     for (int x = 1; x <= m; x++) {
-      int q = 1;
-
-      for (int l = x; l <= m; l += x, q++) {
+      for (int l = x, q = 1; l <= m; l += x, q++) {
         int r = min(m, l + x - 1);
         int num = pref[r] - pref[l - 1];
 
-        sum[x] += int64_t(q) * num;
+        sum[x] += 1ll * q * num;
       }
     }
 
@@ -53,12 +51,12 @@ int main() {
       for (int x = 1; x <= m; x++) {
         int64_t cur = sum[x];
 
-        if (1ll * c * x <= 1ll * m) {
+        if (x <= m / c) {
           for (int q = c, l = c * x; l <= m; q++, l += x) {
             int r = min(m, l + x - 1);
             int num = pref[r] - pref[l - 1];
 
-            cur -= int64_t(q - c + 1) * num;
+            cur -= 1ll * (q - c + 1) * num;
           }
 
           cur += cnt[c * x];
