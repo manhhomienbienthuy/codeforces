@@ -7,6 +7,19 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const int N = 4e5 + 2;
+int spf[N];
+
+void init() {
+  for (int i = 2; i < N; i++) {
+    if (!spf[i]) {
+      spf[i] = i;
+      for (int64_t j = 1ll * i * i; j < N; j += i)
+        if (!spf[j]) spf[j] = i;
+    }
+  }
+}
+
 struct lazy_seg {
   int n;
   vector<int64_t> mn, lazy;
@@ -83,6 +96,8 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
 
+  init();
+
   int t;
   cin >> t;
 
@@ -95,19 +110,7 @@ int main() {
 
     int lim = 2 * n + 2;
 
-    vector<int> spf(lim + 1);
-
-    for (int i = 2; i <= lim; i++) {
-      if (!spf[i]) {
-        spf[i] = i;
-
-        for (int64_t j = 1ll * i * i; j <= lim; j += i) {
-          if (!spf[j]) spf[j] = i;
-        }
-      }
-    }
-
-    vector<vector<int>> pos(lim * +1);
+    vector<vector<int>> pos(lim);
 
     for (int i = 0; i < n; i++) {
       int x = a[i];
@@ -125,10 +128,10 @@ int main() {
 
     vector<int> cand;
 
-    for (int p = 2; p <= lim; p++) {
+    for (int p = 2; p < lim; p++) {
       if (spf[p] != p) continue;
 
-      for (int64_t d = p; d <= lim; d *= p) cand.push_back((int)d);
+      for (int64_t d = p; d < lim; d *= p) cand.push_back((int)d);
     }
 
     sort(cand.begin(), cand.end());
