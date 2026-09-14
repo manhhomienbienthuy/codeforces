@@ -20,16 +20,17 @@ int main() {
     int n;
     cin >> n;
 
-    vector<int> a(n + 1), diff(n + 1), req(n);
-
+    vector<int> a(n + 1);
     for (int k = 1; k <= n; k++) cin >> a[k];
+
+    vector<int> diff(n + 1), req(n);
 
     for (int k = 1; k <= n; k++) {
       int64_t l = 1ll * a[k] * k;
       int64_t r = 1ll * (a[k] + 1) * k - 1;
 
       if (l < n) {
-        r = min(r, 0ll + n - 1);
+        r = min<int64_t>(r, n - 1);
 
         diff[l]++;
         diff[r + 1]--;
@@ -52,21 +53,13 @@ int main() {
 
       if (ban == 0) {
         dp[i + 1] = sum;
-
         sum += dp[i + 1];
-
-        if (sum >= MOD) {
-          sum -= MOD;
-        }
+        if (sum >= MOD) sum -= MOD;
       }
 
       while (ptr < req[i]) {
         sum -= dp[ptr];
-
-        if (sum < 0) {
-          sum += MOD;
-        }
-
+        if (sum < 0) sum += MOD;
         ptr++;
       }
     }

@@ -31,7 +31,7 @@ int main() {
         continue;
       }
 
-      r = min(r, 0ll + n - 1);
+      r = min<int64_t>(r, n - 1);
 
       diff[l]++;
       diff[r + 1]--;
@@ -43,17 +43,12 @@ int main() {
     for (int y = 0; y < n; y++) {
       cur += diff[y];
 
-      if (cur == 0) {
-        b.push_back(y);
-      }
+      if (cur == 0) b.push_back(y);
     }
 
     cout << b.size() << '\n';
 
-    for (int y : b) {
-      cout << y << ' ';
-    }
-
+    for (int y : b) cout << y << ' ';
     cout << '\n';
   }
 

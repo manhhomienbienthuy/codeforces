@@ -25,7 +25,7 @@ int main() {
       s += x;
     }
 
-    cout << (s >= (n + 1) / 2 ? "Bessie\n" : "Elsie\n");
+    cout << (s >= (n - s) ? "Bessie\n" : "Elsie\n");
   }
 
   return 0;

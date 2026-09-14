@@ -7,67 +7,25 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct node {
-  int64_t sum = 0;
-  int64_t need = 0;
-};
-
-struct seg_tree {
+struct fenwick {
   int n;
-  vector<node> st;
+  vector<int64_t> bit;
 
-  seg_tree(int n) : n(n), st(4 * n) {}
+  fenwick(int n) : n(n), bit(n + 1, 0) {}
 
-  node merge_node(const node& l, const node& r) {
-    node res;
-
-    res.sum = l.sum + r.sum;
-    res.need = max(l.need, r.need - l.sum);
-
-    return res;
+  void add(int i, int64_t v) {
+    for (i++; i <= n; i += i & -i) bit[i] += v;
   }
 
-  void update(int v, int l, int r, int pos, int64_t val) {
-    if (l == r) {
-      st[v] = {val, val};
-      return;
-    }
-
-    int m = (l + r) >> 1;
-
-    if (pos <= m) {
-      update(v << 1, l, m, pos, val);
-    } else {
-      update(v << 1 | 1, m + 1, r, pos, val);
-    }
-
-    st[v] = merge_node(st[v << 1], st[v << 1 | 1]);
+  int64_t sum(int i) {
+    int64_t r = 0;
+    for (i++; i > 0; i -= i & -i) r += bit[i];
+    return r;
   }
 
-  pair<int, int64_t> calc(int v, int l, int r, int64_t skill) {
-    if (skill >= st[v].need) {
-      return {0, skill + st[v].sum};
-    }
-
-    if (l == r) {
-      return {1, st[v].sum};
-    }
-
-    int m = (l + r) >> 1;
-
-    auto [cnt_l, skill_l] = calc(v << 1, l, m, skill);
-
-    auto [cnt_r, skill_r] = calc(v << 1 | 1, m + 1, r, skill_l);
-
-    return {cnt_l + cnt_r, skill_r};
-  }
-
-  void update(int pos, int64_t val) { update(1, 0, n - 1, pos, val); }
-
-  int calc() {
-    auto [cnt, skill] = calc(1, 0, n - 1, 0);
-
-    return max(0, cnt - 1);
+  int64_t query(int l, int r) {
+    if (l > r) return 0;
+    return sum(r) - sum(l - 1);
   }
 };
 
@@ -93,17 +51,45 @@ int main() {
       x--;
     }
 
-    seg_tree st(n);
+    fenwick bit(n);
+    set<int> brk;
+
     vector<int> ans(n);
 
     for (int k = n - 1; k >= 0; k--) {
       int pos = p[k];
 
-      st.update(pos, a[pos]);
-      ans[k] = st.calc();
+      bit.add(pos, a[pos]);
+
+      auto it = brk.upper_bound(pos);
+
+      int prv = -1;
+
+      if (it != brk.begin()) {
+        prv = *prev(it);
+      }
+
+      if (prv == -1 || bit.query(prv, pos - 1) < a[pos]) {
+        brk.insert(pos);
+        prv = pos;
+      }
+
+      while (true) {
+        auto nxt_it = brk.upper_bound(prv);
+
+        if (nxt_it == brk.end()) break;
+
+        int nxt = *nxt_it;
+
+        if (bit.query(prv, nxt - 1) < a[nxt]) break;
+
+        brk.erase(nxt_it);
+      }
+
+      ans[k] = (int)brk.size() - 1;
     }
 
-    for (int i = 0; i < n; i++) cout << ans[i] << ' ';
+    for (int x : ans) cout << x << ' ';
     cout << '\n';
   }
 
