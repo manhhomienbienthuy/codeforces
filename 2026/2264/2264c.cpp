@@ -36,7 +36,7 @@ int main() {
     cin >> n;
 
     vector<int64_t> a(n);
-    for (int i = 0; i < n; i++) cin >> a[i];
+    for (int64_t& x : a) cin >> x;
     sort(a.begin(), a.end());
 
     if (n == 1) {
@@ -44,17 +44,22 @@ int main() {
       continue;
     }
 
-    vector<int64_t> suf(n + 1, 0);
+    vector<int64_t> suf(n + 1);
     for (int i = n - 1; i >= 0; i--) suf[i] = (suf[i + 1] + a[i]) % MOD;
 
-    int64_t tot = 0;
-    for (int k = 0; k < n - 1; k++)
-      tot = (tot + suf[k + 1] % MOD * inv_[n - 1 - k]) % MOD;
+    int64_t ways = fac[n - 1];
+    int64_t ans = 0;
 
-    int64_t s = suf[0];
-    int64_t sub = ((s - a[n - 1]) % MOD + MOD) % MOD;
+    for (int i = 0; i < n - 1; i++) {
+      int cnt = n - i - 1;
 
-    int64_t ans = fac[n - 1] % MOD * ((tot - sub) % MOD + MOD) % MOD;
+      int64_t diff = (suf[i + 1] - a[i] * cnt % MOD + MOD) % MOD;
+
+      int64_t other = ways * inv_[cnt] % MOD;
+
+      ans = (ans + diff * other) % MOD;
+    }
+
     cout << ans << '\n';
   }
 
