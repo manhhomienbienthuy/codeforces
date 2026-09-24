@@ -609,6 +609,18 @@ void monotonic_queue(const vector<int>& a, int n, int k) {
   }
 }
 
+int spf[MAX];
+
+void spf_init() {
+  for (int i = 2; i < MAX; i++) {
+    if (!spf[i]) {
+      spf[i] = i;
+      for (int64_t j = 1ll * i * i; j < MAX; j += i)
+        if (!spf[j]) spf[j] = i;
+    }
+  }
+}
+
 void others() {
   // coordinate compression
   vector<int> vals;
