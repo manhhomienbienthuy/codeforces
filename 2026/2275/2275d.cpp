@@ -25,25 +25,25 @@ int main() {
     int64_t k;
     cin >> n >> k;
 
-    vector<lab> v;
-    v.reserve(n);
+    vector<lab> v(n);
 
-    int64_t mx = LLONG_MIN;
+    int64_t lo = LLONG_MIN, hi = LLONG_MIN;
 
     for (int i = 0; i < n; i++) {
-      int64_t a, b, c;
-      cin >> a >> b >> c;
+      int64_t a, b, c, s;
 
-      int64_t s = a + b + c;
-      mx = max(mx, s);
+      cin >> a >> b >> c;
+      s = a + b + c;
+
+      hi = max(hi, s + k);
 
       if (a == b && b == c) {
-        v.push_back({s, 0, 1});
+        v[i] = {s, 0, 1};
       } else if (a <= b && b <= c) {
         int64_t p = min(b - a + 1, c - b + 1);
-        v.push_back({s, p, 2});
+        v[i] = {s, p, 2};
       } else {
-        v.push_back({s, 0, 0});
+        v[i] = {s, 0, 0};
       }
     }
 
@@ -72,9 +72,6 @@ int main() {
 
       return need <= k;
     };
-
-    int64_t lo = LLONG_MIN;
-    int64_t hi = mx + k;
 
     while (lo <= hi) {
       int64_t mid = (lo + hi) >> 1;
