@@ -7,7 +7,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int OFF = 30000;
+const int OFFSET = 30000;
 const int SZ = 60001;
 
 int main() {
@@ -29,7 +29,7 @@ int main() {
     int64_t ans = 0;
 
     for (int x = 0; x < n - 4; x++) {
-      v[x] = a[x] + a[x + 2] - a[x + 4] + OFF;
+      v[x] = a[x] + a[x + 2] - a[x + 4] + OFFSET;
 
       ans += cnt[v[x]] - (x >= 2 && v[x - 2] == v[x]) -
              (x >= 4 && v[x - 4] == v[x]);
