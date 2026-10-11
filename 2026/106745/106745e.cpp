@@ -38,7 +38,7 @@ int main() {
 
       int around = ask(m, 2) - ask(m, 1);
 
-      ans += (ask(m - 1, 1) + ask(m + 1, 1) - around) == 2;
+      ans += (ask(m - 1, 1) + ask(m + 1, 1) - around) >> 1;
 
       if (!(n & 1)) {
         int x = ask(m, m - 2) - (m > 3 ? ask(m, m - 3) : 0),
