@@ -16,14 +16,8 @@ int main() {
 
   while (t--) {
     int a, b;
-
     cin >> a >> b;
-
-    if ((a + b) & 1) {
-      cout << (b <= a + 1 ? a + 1 : -1) << '\n';
-    } else {
-      cout << (b <= a ? a : -1) << '\n';
-    }
+    cout << (a + 1 < b ? -1 : a + ((a + b) & 1)) << '\n';
   }
 
   return 0;
