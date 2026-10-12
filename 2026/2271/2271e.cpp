@@ -19,61 +19,48 @@ int main() {
     cin >> n >> k;
 
     vector<int> cnt(n + 1);
-    set<int> vals;
 
     for (int i = 0; i < n; i++) {
       int x;
       cin >> x;
       cnt[x]++;
-      vals.insert(x);
     }
 
-    int ans = 0;
+    auto check = [&](int x) {
+      if (!k && !x) return false;
 
-    while (!vals.empty()) {
-      while (!vals.empty() && *vals.begin() <= k) {
-        int x = *vals.begin();
+      vector<int> cnt2 = cnt;
 
-        k += cnt[x];
-        ans += cnt[x];
+      int mx_reach = n + k + 2 * x, c = 0, used = 0;
 
-        cnt[x] = 0;
-        vals.erase(vals.begin());
+      for (int i = n; i > 1; i--) {
+        c += cnt2[i];
+
+        int cap = mx_reach - i, need = max(0, c - cap);
+
+        used += need;
+        c -= need;
+
+        cnt2[(i + 1) / 2] += 2 * need;
+
+        if (used > x) return false;
       }
 
-      if (vals.empty()) break;
+      return true;
+    };
 
-      int reach = k + 1;
+    int l = 0, r = n;
 
-      for (int x : vals) {
-        if (x > reach) break;
-        reach += cnt[x];
-      }
+    while (l <= r) {
+      int mid = (l + r) >> 1;
 
-      auto lo = vals.upper_bound(reach);
-      auto hi = vals.upper_bound(min(n, 2 * reach));
-
-      int x;
-
-      if (lo != hi) {
-        x = *prev(hi);
-      } else {
-        x = *vals.rbegin();
-      }
-
-      if (!--cnt[x]) vals.erase(x);
-
-      int y = (x + 1) >> 1;
-
-      if (!cnt[y]) vals.insert(y);
-
-      cnt[y] += 2;
-
-      k++;
-      ans++;
+      if (check(mid))
+        r = mid - 1;
+      else
+        l = mid + 1;
     }
 
-    cout << ans << '\n';
+    cout << n + 2 * l << '\n';
   }
 
   return 0;
