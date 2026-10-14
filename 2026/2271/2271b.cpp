@@ -18,20 +18,22 @@ int main() {
     int n, k;
     cin >> n >> k;
 
-    vector<int> cnt(n + 1);
+    vector<int> a(n);
+    for (int& x : a) cin >> x;
 
-    for (int i = 0; i < n; i++) {
-      int x;
-      cin >> x;
-      cnt[x]++;
-    }
+    sort(a.begin(), a.end());
 
     bool ok = false;
 
-    for (int x = 0; x <= n; x++) {
-      if (cnt[x] >= 2 * k) continue;
+    for (int i = 0, j, prev = -1; i < n; i = j, prev++) {
+      if (a[i] != prev + 1) break;
 
-      ok = (cnt[x] == 2 * k - 1);
+      for (j = i + 1; j < n && a[j] == a[i]; j++);
+      int l = j - i;
+
+      if (l >= 2 * k) continue;
+
+      ok = (l == 2 * k - 1);
       break;
     }
 
