@@ -39,11 +39,9 @@ int main() {
         break;
       }
 
-      if (m == n - 1) {
-        if (g[i] == n - 1) {
-          center = true;
-          break;
-        }
+      if (m == n - 1 && g[i] == n - 1) {
+        center = true;
+        break;
       }
     }
 
