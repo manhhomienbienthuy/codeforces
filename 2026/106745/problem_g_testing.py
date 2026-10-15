@@ -319,6 +319,8 @@ def parse_first_output(text: str, trees: Sequence[Tree]) -> List[List[int]]:
         for _ in range(tree.n):
             value = parse_int(tokens[position], f"color for tree {case_id}")
             position += 1
+            # For problem G:
+            # if value not in (0, 1, 2):
             if value not in (0, 1):
                 raise WrongAnswer(f"Tree {case_id}: color {value} is not 0 or 1.")
             current.append(value)
