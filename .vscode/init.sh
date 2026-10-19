@@ -2,6 +2,7 @@ read -p "Round #: " round
 export R=$round
 
 read -p "Is this contest (Y/n)? " yn
+yn=${yn:-Y}
 if [ $yn = "Y" ] || [ $yn = "y" ]; then
     export T=contest
 else
@@ -9,6 +10,7 @@ else
 fi
 
 read -p "Create new folder (Y/n)? " yn
+yn=${yn:-Y}
 if [ $yn = "Y" ] || [ $yn = "y" ]; then
     mkdir -p "$(date +%Y)/$R"
     cd "$(date +%Y)/$R"

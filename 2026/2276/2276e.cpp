@@ -20,7 +20,7 @@ int main() {
 
     cin >> n >> s;
 
-    vector next_pos(n + 1, vector<int>(10, n));
+    vector next_pos(n + 2, vector<int>(10, n));
 
     for (int i = n - 1; i >= 0; i--) {
       next_pos[i] = next_pos[i + 1];
@@ -29,43 +29,25 @@ int main() {
 
     vector<int64_t> ds(n + 2), dc(n + 2);
 
-    auto add = [&](int l, int r, int64_t sl, int64_t cn) {
-      if (l > r) return;
-
-      ds[l] += sl;
-      ds[r + 1] -= sl;
-
-      dc[l] += cn;
-      dc[r + 1] -= cn;
-    };
-
     for (int l = 0; l < n; l++) {
-      int p1 = next_pos[l][2];
+      int p202 = next_pos[l][2];
+      p202 = next_pos[p202 + 1][0];
+      p202 = next_pos[p202 + 1][2];
 
-      if (p1 == n) continue;
+      int p2025 = next_pos[p202 + 1][5], p2026 = next_pos[p202 + 1][6];
 
-      int p2 = next_pos[p1 + 1][0];
+      if (p2025 == n || p2026 < p2025) continue;
 
-      if (p2 == n) continue;
+      int64_t ways = p2026 - p2025;
 
-      int p3 = next_pos[p2 + 1][2];
+      dc[l] += ways;
+      dc[p2025 + 1] -= ways;
 
-      if (p3 == n) continue;
+      ds[p2025 + 1] -= 1;
+      ds[p2026] += 1;
 
-      int p5 = next_pos[p3 + 1][5];
-
-      if (p5 == n) continue;
-
-      int p6 = next_pos[p3 + 1][6];
-
-      if (p6 != n && p6 < p5) continue;
-
-      int r = p6 - 1;
-
-      int64_t ways = r - p5 + 1;
-
-      add(l, p5, 0, ways);
-      add(p5 + 1, r, -1, r + 1);
+      dc[p2025 + 1] += p2026;
+      dc[p2026] -= p2026;
     }
 
     int64_t sl = 0, cn = 0;
