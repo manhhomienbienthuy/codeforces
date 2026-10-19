@@ -24,8 +24,7 @@ int main() {
       int k = (n + 1) >> 1;
 
       cout << k << '\n';
-      for (int i = 1; i <= k; i++)
-        cout << i << ' ' << min(n, k + i - 1) << '\n';
+      for (int i = 1; i <= k; i++) cout << i << ' ' << k + i - 1 << '\n';
     }
   }
 
