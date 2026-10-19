@@ -19,6 +19,7 @@ fi
 
 # create C++ template for problem A, B, C, ...
 cr() {
+    git add -A
     echo "/*!" > $R$1.cpp
     echo " * author: manhhomienbienthuy" >> $R$1.cpp
     echo " * created: $(date -u -Iseconds)" >> $R$1.cpp
@@ -30,6 +31,7 @@ cr() {
 
 # create Python template for problem A, B, C, ...
 crp() {
+    git add -A
     echo "# author: manhhomienbienthuy" > $R$1.py
     echo "# created: $(date -u -Iseconds)" >> $R$1.py
     echo "# https://codeforces.com/${T}/${round}/problem/${1^^}" >> $R$1.py
