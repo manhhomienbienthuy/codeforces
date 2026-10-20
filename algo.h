@@ -193,6 +193,8 @@ struct seg_tree {
     st[v] = max(st[v << 1], st[v << 1 | 1]);
   }
 
+  void update(int p, int val) { update(1, 0, n - 1, p, val); }
+
   int query(int v, int l, int r, int ql, int qr) {
     if (ql > r || qr < l) return INT_MIN;
 
@@ -202,6 +204,8 @@ struct seg_tree {
     return max(query(v << 1, l, m, ql, qr),
                query(v << 1 | 1, m + 1, r, ql, qr));
   }
+
+  int query(int l, int r) { return query(1, 0, n - 1, l, r); }
 };
 
 struct lazy_seg {
