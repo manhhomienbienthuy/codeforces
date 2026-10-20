@@ -7,80 +7,43 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct seg_tree {
-  int n;
-  int version;
-
-  vector<int64_t> st;
+struct fenwick {
+  int n, version;
+  vector<int64_t> bit;
   vector<int> node_version;
 
-  seg_tree(int n) : n(n), version(1), st(4 * n, 0), node_version(4 * n, 0) {}
+  fenwick(int n) : n(n), version(1), bit(n + 1, 0), node_version(n + 1, 1) {}
 
-  int64_t value(int v) const {
-    if (node_version[v] != version) {
-      return 0;
-    }
+  int64_t value(int i) { return node_version[i] == version ? bit[i] : 0; }
 
-    return st[v];
-  }
-
-  void touch(int v) {
-    if (node_version[v] != version) {
-      node_version[v] = version;
-      st[v] = 0;
+  void touch(int i) {
+    if (node_version[i] != version) {
+      node_version[i] = version;
+      bit[i] = 0;
     }
   }
 
   void reset() { version++; }
 
-  void update(int v, int l, int r, int pos, int val) {
-    touch(v);
-
-    if (l == r) {
-      st[v] = val;
-      return;
+  void add(int i, int64_t v) {
+    for (i++; i <= n; i += i & -i) {
+      touch(i);
+      bit[i] += v;
     }
-
-    int m = (l + r) >> 1;
-
-    if (pos <= m) {
-      update(v << 1, l, m, pos, val);
-    } else {
-      update(v << 1 | 1, m + 1, r, pos, val);
-    }
-
-    st[v] = value(v << 1) + value(v << 1 | 1);
   }
 
-  void update(int pos, int val) { update(1, 0, n - 1, pos, val); }
-
-  int64_t query(int v, int l, int r, int ql, int qr) const {
-    if (ql > r || qr < l) {
-      return 0;
-    }
-
-    if (node_version[v] != version) {
-      return 0;
-    }
-
-    if (ql <= l && r <= qr) {
-      return st[v];
-    }
-
-    int m = (l + r) >> 1;
-
-    return query(v << 1, l, m, ql, qr) + query(v << 1 | 1, m + 1, r, ql, qr);
+  int64_t sum(int i) {
+    int64_t r = 0;
+    for (i++; i > 0; i -= i & -i) r += value(i);
+    return r;
   }
 
-  int64_t query(int l, int r) const {
-    if (l > r) {
-      return 0;
-    }
-
-    return query(1, 0, n - 1, l, r);
+  int64_t query(int l, int r) {
+    if (l > r) return 0;
+    return sum(r) - sum(l - 1);
   }
 
-  int get(int pos) const { return (int)(query(pos, pos)); }
+  int get(int i) { return int(query(i, i)); }
 };
 
 int main() {
@@ -94,7 +57,7 @@ int main() {
     int n, q;
     cin >> n >> q;
 
-    seg_tree tree(n);
+    fenwick bit(n + 1);
 
     vector<int> cnt(n + 1, 0);
     set<int> vals;
@@ -126,34 +89,29 @@ int main() {
         for (int v : vals) cnt[v] = 0;
 
         vals.clear();
-        tree.reset();
+        bit.reset();
 
         for (auto [pos, val] : entries) {
-          tree.update(pos - 1, val);
+          bit.add(pos, val);
           add(val);
         }
       } else if (ops == 2) {
         int i, x;
         cin >> i >> x;
 
-        i--;
-
-        int old = tree.get(i);
+        int old = bit.get(i);
 
         if (old == x) continue;
 
         remove(old);
         add(x);
 
-        tree.update(i, x);
+        bit.add(i, x - old);
       } else {
         int l, r;
         cin >> l >> r;
 
-        l--;
-        r--;
-
-        cout << tree.query(l, r) << '\n';
+        cout << bit.query(l, r) << '\n';
       }
     }
   }
