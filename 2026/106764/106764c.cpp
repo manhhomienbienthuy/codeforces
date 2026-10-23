@@ -23,18 +23,17 @@ int main() {
   vector<string> grid(r);
   for (string& row : grid) cin >> row;
 
-  auto check = [&](string& s) -> bool {
-    vector<int> dx = {-1, 1, 0, 0}, dy = {0, 0, -1, 1};
+  vector<int> dx = {-1, 1, 0, 0}, dy = {0, 0, -1, 1};
 
-    for (int sx = 0; sx < r; sx++) {
-      for (int sy = 0; sy < c; sy++) {
-        if (grid[sx][sy] != s[0]) continue;
+  auto check = [&](string& s) -> bool {
+    for (int i = 0; i < r; i++) {
+      for (int j = 0; j < c; j++) {
+        if (grid[i][j] != s[0]) continue;
 
         vector visited(r, vector<bool>(c, false));
         stack<state> st;
 
-        visited[sx][sy] = true;
-        st.push({sx, sy, 0, 0});
+        st.push({i, j, 0, 0});
 
         while (!st.empty()) {
           state& cur = st.top();
@@ -47,12 +46,13 @@ int main() {
             continue;
           }
 
+          visited[cur.x][cur.y] = true;
+
           int d = cur.dir++, nx = cur.x + dx[d], ny = cur.y + dy[d];
 
           if (nx < 0 || nx >= r || ny < 0 || ny >= c) continue;
           if (visited[nx][ny] || grid[nx][ny] != s[cur.pos + 1]) continue;
 
-          visited[nx][ny] = true;
           st.push({nx, ny, cur.pos + 1, 0});
         }
       }
