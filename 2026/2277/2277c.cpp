@@ -37,45 +37,41 @@ int main() {
       x--;
     }
 
-    vector<int> depth(n), root(n, -1), parent(n, -1);
-    stack<int> st;
+    vector<int> depth(n), root(n, -1);
+    stack<pair<int, int>> st1;
 
-    for (int x : g[0]) {
-      parent[x] = 0;
-      depth[x] = 1;
-      root[x] = x;
-      st.push(x);
-    }
+    st1.push({0, -1});
 
-    while (!st.empty()) {
-      int y = st.top();
-      st.pop();
+    while (!st1.empty()) {
+      auto [y, p] = st1.top();
+      st1.pop();
 
       for (int x : g[y]) {
-        if (x == parent[y]) continue;
+        if (x == p) continue;
 
-        parent[x] = y;
         depth[x] = depth[y] + 1;
-        root[x] = root[y];
+        root[x] = y ? root[y] : x;
 
-        st.push(x);
+        st1.push({x, y});
       }
     }
 
     vector<int> dist(n, -1);
 
     dist[n - 1] = 0;
-    st.push(n - 1);
 
-    while (!st.empty()) {
-      int y = st.top();
-      st.pop();
+    stack<int> st2;
+    st2.push(n - 1);
+
+    while (!st2.empty()) {
+      int y = st2.top();
+      st2.pop();
 
       for (int x : g[y]) {
         if (dist[x] != -1) continue;
 
         dist[x] = dist[y] + 1;
-        st.push(x);
+        st2.push(x);
       }
     }
 

@@ -18,14 +18,15 @@ int main() {
     int n;
     cin >> n;
 
-    vector<int> a(n);
-    for (int& x : a) cin >> x;
+    int mn = INT_MAX;
 
-    int mn = ranges::min(a);
-    if (mn <= n - 1)
-      cout << n << '\n';
-    else
-      cout << 0 << '\n';
+    for (int i = 0; i < n; i++) {
+      int x;
+      cin >> x;
+      mn = min(mn, x);
+    }
+
+    cout << (mn < n ? n : 0) << '\n';
   }
 
   return 0;

@@ -26,19 +26,17 @@ int main() {
       cnt[x]++;
     }
 
-    int ans = 0, pref = 0;
-    bool ok = true;
+    int ans = n + 1, pref = 0;
 
     for (int i = 0; i <= n; i++) {
       pref += cnt[i] - k;
       if (!cnt[i] || pref < 0) {
         ans = i;
-        ok = false;
         break;
       }
     }
 
-    cout << (ok ? n + 1 : ans) << '\n';
+    cout << ans << '\n';
   }
 
   return 0;
