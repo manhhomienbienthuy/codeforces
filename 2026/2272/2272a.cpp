@@ -7,22 +7,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int calc(const vector<int>& a, int n, int k) {
-  vector<bool> visited(n);
-  vector<int> f(n);
-
-  int mex = 0;
-
-  for (int i = 0; i < n; i++) {
-    visited[a[i]] = true;
-    while (visited[mex]) mex++;
-    f[i] = mex;
-  }
-
-  sort(f.begin(), f.end(), greater<>());
-  return f[k - 1];
-}
-
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
@@ -37,28 +21,24 @@ int main() {
     vector<int> a(n);
     for (int& x : a) cin >> x;
 
-    int mx = calc(a, n, k);
-    int ii = -1, jj = -1;
+    int ii = -1;
 
-    for (int i = 0; i < n; i++) {
-      for (int j = i + 1; j < n; j++) {
-        swap(a[i], a[j]);
-
-        int cur = calc(a, n, k);
-
-        if (cur > mx) {
-          mx = cur;
-          ii = i;
-          jj = j;
-        }
-
-        swap(a[i], a[j]);
+    for (int i = 0; i <= n - k; i++) {
+      if (a[i] > n - k) {
+        ii = i;
+        break;
       }
     }
 
     if (ii == -1) {
       cout << -1 << '\n';
     } else {
+      int jj = n - k + 1;
+
+      for (int i = jj + 1; i < n; i++) {
+        if (a[i] < a[jj]) jj = i;
+      }
+
       cout << ii + 1 << ' ' << jj + 1 << '\n';
     }
   }
