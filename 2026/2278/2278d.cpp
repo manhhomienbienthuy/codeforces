@@ -25,7 +25,7 @@ int main() {
 
     int64_t med = a[n / 2], ans = 0;
 
-    for (int i = 0; i < n; i++) ans += abs(a[i] - med);
+    for (int x : a) ans += abs(x - med);
 
     cout << ans << ' ' << a[n - 1] - a[0] << '\n';
   }

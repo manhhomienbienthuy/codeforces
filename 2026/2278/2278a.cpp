@@ -21,27 +21,27 @@ int main() {
     string p, q;
     cin >> p >> q;
 
-    if (n < m + 3) {
+    if (n != m + 3) {
       cout << "NO\n";
-    } else {
-      vector<int> cnt(26);
-
-      for (int i = 0; i < n; i++) cnt[p[i] - 'a']++;
-      for (int i = 0; i < m; i++) cnt[q[i] - 'a']--;
-
-      bool ok = (cnt['s' - 'a'] == 1) && (cnt['i' - 'a'] == 1) &&
-                (cnt['x' - 'a'] == 1);
-      if (ok) {
-        for (int i = 0; i < 26; i++) {
-          if (i != 's' - 'a' && i != 'i' - 'a' && i != 'x' - 'a' && cnt[i]) {
-            ok = false;
-            break;
-          }
-        }
-      }
-
-      cout << (ok ? "YES\n" : "NO\n");
+      continue;
     }
+
+    vector<int> cnt(26);
+
+    for (char c : p) cnt[c - 'a']++;
+    for (char c : q) cnt[c - 'a']--;
+
+    bool ok = true;
+
+    for (int i = 0; i < 26; i++) {
+      int x = (i == 8 || i == 18 || i == 23);
+      if (cnt[i] != x) {
+        ok = false;
+        break;
+      }
+    }
+
+    cout << (ok ? "YES\n" : "NO\n");
   }
 
   return 0;

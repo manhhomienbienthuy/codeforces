@@ -21,9 +21,8 @@ int main() {
     vector<int> a(n);
 
     for (int i = 0; i < n; i++) {
-      int x;
-      cin >> x;
-      a[i] = (i & 1) ? x : -x;
+      cin >> a[i];
+      if (!(i & 1)) a[i] = -a[i];
     }
 
     sort(a.begin(), a.end(), greater<>());

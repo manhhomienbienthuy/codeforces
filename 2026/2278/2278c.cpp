@@ -21,28 +21,17 @@ int main() {
     vector<int> a(n);
     for (int& x : a) cin >> x;
 
-    int l = 0;
-    while (l < n && a[l] == 1) l++;
+    int ans = accumulate(a.begin(), a.end(), 0);
 
-    if (l == n) {
+    if (ans == n) {
       cout << -1 << '\n';
-    } else {
-      int ans = accumulate(a.begin(), a.end(), 0);
-      bool ok = false;
-
-      for (int i = 1; i < n - 1; i++) {
-        if (a[i] >= 2) {
-          ok = true;
-          break;
-        }
-      }
-
-      if (ok) {
-        cout << ans - 1 << '\n';
-      } else {
-        cout << ans - n + 1 << '\n';
-      }
+      continue;
     }
+
+    bool ok = false;
+    for (int i = 1; !ok && i < n - 1; i++) ok = (a[i] >= 2);
+
+    cout << ans - (ok ? 1 : n - 1) << '\n';
   }
 
   return 0;

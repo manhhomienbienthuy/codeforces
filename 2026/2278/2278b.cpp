@@ -15,19 +15,16 @@ int main() {
   cin >> t;
 
   while (t--) {
-    vector<int> a(3), ans(3);
+    vector<int> a(3);
     cin >> a[0] >> a[1] >> a[2];
 
     int n = a[0] + a[1] + a[2];
 
     int it = int(max_element(a.begin(), a.end()) - a.begin());
-    ans[(it + 2) % 3] = n;
 
-    string s = "RSP";
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < ans[i]; j++) cout << s[i];
-    }
-    cout << '\n';
+    string ans = string(n, "RSP"[(it + 2) % 3]);
+
+    cout << ans << '\n';
   }
 
   return 0;
