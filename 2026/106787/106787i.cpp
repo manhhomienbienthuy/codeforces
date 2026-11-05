@@ -14,22 +14,12 @@ int main() {
   int64_t n;
   cin >> n;
 
-  int64_t nn = n * n, mn = LLONG_MAX, mnx = 1, mny = nn;
+  int64_t nn = n * n;
 
-  for (int64_t i = 1; i <= n; i++) {
+  for (int64_t i = n - 1; i >= 1; i--) {
     if (nn % i == 0) {
-      int64_t j = nn / i;
-
-      if (i == j) continue;
-
-      if (i + j < mn) {
-        mn = i + j;
-        mnx = i;
-        mny = j;
-      }
+      cout << i + n << ' ' << nn / i + n << '\n';
+      return 0;
     }
   }
-
-  cout << mnx + n << ' ' << mny + n << '\n';
-  return 0;
 }
