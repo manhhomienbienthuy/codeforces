@@ -7,6 +7,82 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+struct lca_tree {
+  int n, lg;
+  vector<int> dep;
+  vector<vector<int>> up, g;
+
+  lca_tree(int n) : n(n) {
+    lg = 1;
+
+    while ((1 << lg) <= n) lg++;
+
+    dep.assign(n, 0);
+    up.assign(lg, vector<int>(n));
+    g.assign(n, vector<int>());
+  }
+
+  void add_edge(int u, int v) {
+    g[u].push_back(v);
+    g[v].push_back(u);
+  }
+
+  void build(int root = 0) {
+    vector<int> stk = {root};
+    up[0][root] = root;
+
+    vector<bool> vis(n, false);
+    vis[root] = true;
+
+    while (!stk.empty()) {
+      int v = stk.back();
+      stk.pop_back();
+
+      for (int k = 1; k < lg; k++) up[k][v] = up[k - 1][up[k - 1][v]];
+
+      for (int to : g[v]) {
+        if (!vis[to]) {
+          vis[to] = true;
+          dep[to] = dep[v] + 1;
+          up[0][to] = v;
+          stk.push_back(to);
+        }
+      }
+    }
+  }
+
+  int kth(int v, int k) {
+    for (int i = 0; i < lg; i++)
+      if (k >> i & 1) v = up[i][v];
+    return v;
+  }
+
+  int lca(int a, int b) {
+    if (dep[a] < dep[b]) swap(a, b);
+
+    a = kth(a, dep[a] - dep[b]);
+
+    if (a == b) return a;
+
+    for (int i = lg - 1; i >= 0; i--)
+      if (up[i][a] != up[i][b]) {
+        a = up[i][a];
+        b = up[i][b];
+      }
+
+    return up[0][a];
+  }
+
+  int dist(int a, int b) {
+    int c = lca(a, b);
+    return dep[a] + dep[b] - 2 * dep[c];
+  }
+
+  bool on_path(int u, int v, int x) {
+    return dist(u, v) == dist(u, x) + dist(x, v);
+  }
+};
+
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
@@ -18,7 +94,18 @@ int main() {
     int n;
     cin >> n;
 
-    vector<vector<int>> g(n);
+    if (!(n & 1)) {
+      for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+      }
+
+      cout << n + 1 << '\n';
+      continue;
+    }
+
+    lca_tree tree(n);
+
     for (int i = 0; i < n - 1; i++) {
       int u, v;
       cin >> u >> v;
@@ -26,65 +113,10 @@ int main() {
       u--;
       v--;
 
-      g[u].push_back(v);
-      g[v].push_back(u);
+      tree.add_edge(u, v);
     }
 
-    if (!(n & 1)) {
-      cout << n + 1 << '\n';
-      continue;
-    }
-
-    int q;
-    for (q = 1; (1 << q) <= n; q++);
-
-    vector<int> depth(n);
-    vector<vector<int>> up(q, vector<int>(n));
-
-    stack<int> st;
-    st.push(0);
-
-    while (!st.empty()) {
-      int v = st.top();
-      st.pop();
-
-      for (int j = 1; j < q; j++) {
-        up[j][v] = up[j - 1][up[j - 1][v]];
-      }
-
-      for (int u : g[v]) {
-        if (u == up[0][v]) continue;
-
-        up[0][u] = v;
-        depth[u] = depth[v] + 1;
-        st.push(u);
-      }
-    }
-
-    auto lca = [&](int u, int v) {
-      if (depth[u] < depth[v]) swap(u, v);
-
-      int k = depth[u] - depth[v];
-
-      for (int j = 0; j < q; j++)
-        if ((k >> j) & 1) u = up[j][u];
-
-      if (u == v) return u;
-
-      for (int j = q - 1; j >= 0; j--) {
-        if (up[j][u] != up[j][v]) {
-          u = up[j][u];
-          v = up[j][v];
-        }
-      }
-
-      return up[0][u];
-    };
-
-    auto dist = [&](int u, int v) {
-      int w = lca(u, v);
-      return depth[u] + depth[v] - 2 * depth[w];
-    };
+    tree.build();
 
     vector<pair<int, int>> cand = {
         {n, n - 1},
@@ -97,12 +129,12 @@ int main() {
     for (auto [k, x] : cand) {
       bool gray = false;
 
-      for (int u = 0; u < n && !gray; u++) {
+      for (int u = 0; !gray && u < n; u++) {
         int v = k - u - 2;
 
         if (v < 0 || v >= n || u >= v) continue;
 
-        gray = gray || (dist(u, v) == dist(u, x) + dist(x, v));
+        gray = tree.on_path(u, v, x);
       }
 
       if (gray) {
