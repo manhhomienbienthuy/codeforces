@@ -1,5 +1,8 @@
 a.exe
+a.out
 input
 output
+input.txt
+output.txt
 tmp.cpp
 tmp.py

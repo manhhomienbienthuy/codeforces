@@ -14,7 +14,7 @@ yn=${yn:-Y}
 if [ $yn = "Y" ] || [ $yn = "y" ]; then
     mkdir -p "$(date +%Y)/$R"
     cd "$(date +%Y)/$R"
-    touch input
+    touch input.txt
 fi
 
 # create C++ template for problem A, B, C, ...
@@ -41,7 +41,7 @@ crp() {
 
 # Run C++ solution for problem A, B, C, ...
 run() {
-    g++ -Wall -Wextra -Winvalid-pch -Wconversion -static -O2 -std=c++23 $R$1.cpp && ./a.exe < input
+    g++ -Wall -Wextra -Winvalid-pch -Wconversion -static -O2 -std=c++23 $R$1.cpp && ./a.exe < input.txt
 }
 
 # git commit
