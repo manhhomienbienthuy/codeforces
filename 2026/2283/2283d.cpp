@@ -7,82 +7,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct lca_tree {
-  int n, lg;
-  vector<int> dep;
-  vector<vector<int>> up, g;
-
-  lca_tree(int n) : n(n) {
-    lg = 1;
-
-    while ((1 << lg) <= n) lg++;
-
-    dep.assign(n, 0);
-    up.assign(lg, vector<int>(n));
-    g.assign(n, vector<int>());
-  }
-
-  void add_edge(int u, int v) {
-    g[u].push_back(v);
-    g[v].push_back(u);
-  }
-
-  void build(int root = 0) {
-    vector<int> stk = {root};
-    up[0][root] = root;
-
-    vector<bool> vis(n, false);
-    vis[root] = true;
-
-    while (!stk.empty()) {
-      int v = stk.back();
-      stk.pop_back();
-
-      for (int k = 1; k < lg; k++) up[k][v] = up[k - 1][up[k - 1][v]];
-
-      for (int to : g[v]) {
-        if (!vis[to]) {
-          vis[to] = true;
-          dep[to] = dep[v] + 1;
-          up[0][to] = v;
-          stk.push_back(to);
-        }
-      }
-    }
-  }
-
-  int kth(int v, int k) {
-    for (int i = 0; i < lg; i++)
-      if (k >> i & 1) v = up[i][v];
-    return v;
-  }
-
-  int lca(int a, int b) {
-    if (dep[a] < dep[b]) swap(a, b);
-
-    a = kth(a, dep[a] - dep[b]);
-
-    if (a == b) return a;
-
-    for (int i = lg - 1; i >= 0; i--)
-      if (up[i][a] != up[i][b]) {
-        a = up[i][a];
-        b = up[i][b];
-      }
-
-    return up[0][a];
-  }
-
-  int dist(int a, int b) {
-    int c = lca(a, b);
-    return dep[a] + dep[b] - 2 * dep[c];
-  }
-
-  bool on_path(int u, int v, int x) {
-    return dist(u, v) == dist(u, x) + dist(x, v);
-  }
-};
-
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
@@ -104,7 +28,7 @@ int main() {
       continue;
     }
 
-    lca_tree tree(n);
+    vector<int> head(n, -1), to, nxt;
 
     for (int i = 0; i < n - 1; i++) {
       int u, v;
@@ -113,10 +37,14 @@ int main() {
       u--;
       v--;
 
-      tree.add_edge(u, v);
-    }
+      to.push_back(v);
+      nxt.push_back(head[u]);
+      head[u] = (int)to.size() - 1;
 
-    tree.build();
+      to.push_back(u);
+      nxt.push_back(head[v]);
+      head[v] = (int)to.size() - 1;
+    }
 
     vector<pair<int, int>> cand = {
         {n, n - 1},
@@ -126,15 +54,56 @@ int main() {
 
     int ans = n;
 
-    for (auto [k, x] : cand) {
+    for (auto& [k, x] : cand) {
+      vector<int> comp(n, -1);
+      comp[x] = -2;
+
+      int e = head[x], cid = 0;
+
+      while (e != -1) {
+        int root = to[e];
+
+        if (comp[root] == -1) {
+          comp[root] = cid;
+
+          stack<int> st;
+          st.push(root);
+
+          while (!st.empty()) {
+            int v = st.top();
+            st.pop();
+
+            int j = head[v];
+
+            while (j != -1) {
+              int u = to[j];
+
+              if (comp[u] == -1) {
+                comp[u] = cid;
+                st.push(u);
+              }
+
+              j = nxt[j];
+            }
+          }
+
+          cid++;
+        }
+
+        e = nxt[e];
+      }
+
       bool gray = false;
 
-      for (int u = 0; !gray && u < n; u++) {
+      for (int u = 0; u < n; u++) {
         int v = k - u - 2;
 
         if (v < 0 || v >= n || u >= v) continue;
 
-        gray = tree.on_path(u, v, x);
+        if (comp[u] != comp[v]) {
+          gray = true;
+          break;
+        }
       }
 
       if (gray) {

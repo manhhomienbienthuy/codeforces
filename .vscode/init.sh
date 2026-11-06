@@ -44,6 +44,10 @@ run() {
     g++ -Wall -Wextra -Winvalid-pch -Wconversion -static -O2 -std=c++23 $R$1.cpp && ./a.exe < input.txt
 }
 
+runp() {
+    pypy $R$1.py < input.txt
+}
+
 # git commit
 cm() {
     git add -A && git commit -m "$(date -Iseconds)" && git push origin main
