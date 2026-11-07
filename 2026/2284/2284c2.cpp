@@ -7,31 +7,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> factor(int x) {
-  vector<int> p;
-
-  for (int d = 2; int64_t{d} * d <= x; d++) {
-    if (x % d) continue;
-
-    p.push_back(d);
-    while (x % d == 0) x /= d;
-  }
-
-  if (x > 1) p.push_back(x);
-
-  return p;
-}
-
 int find_mid(int u, int v) {
-  vector<int> p = factor(u), q = factor(v);
-
-  p.insert(p.end(), q.begin(), q.end());
-  sort(p.begin(), p.end());
-  p.erase(unique(p.begin(), p.end()), p.end());
-
-  int lim = min(v - 1, u + (1 << (int)p.size()));
-
-  for (int x = u + 1; x <= lim; x++) {
+  for (int x = u + 1; x < v; x++) {
     if (gcd(u, x) == 1 && gcd(x, v) == 1) return x;
   }
 

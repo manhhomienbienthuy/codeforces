@@ -15,10 +15,10 @@ int main() {
   cin >> t;
 
   while (t--) {
-    int64_t n;
+    int n;
     cin >> n;
 
-    int64_t x = n / 2, y = n - x;
+    int x = n / 2, y = n - x;
 
     cout << x * y << '\n';
   }

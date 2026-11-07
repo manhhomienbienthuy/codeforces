@@ -100,7 +100,7 @@ void second() {
 
     if (!ok) {
       cout << string(n - 1, '0') << '\n';
-      return;
+      continue;
     }
 
     int flip = color[n - 1];
