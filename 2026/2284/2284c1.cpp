@@ -26,8 +26,8 @@ int main() {
   int p = MAX;
 
   for (int i = MAX - 1; i >= 0; i--) {
-    nxt[i] = p;
     if (sieve[i]) p = i;
+    nxt[i] = p;
   }
 
   int t;

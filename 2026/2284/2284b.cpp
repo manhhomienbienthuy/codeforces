@@ -23,10 +23,8 @@ int main() {
 
     sort(a.begin(), a.end());
 
-    int i = n - 1;
-    while (a[i] == a[n - 1]) i--;
-
-    if (k < n - 1 - i) {
+    int cnt = int(a.end() - lower_bound(a.begin(), a.end(), a[n - 1]));
+    if (k < cnt) {
       cout << "NO\n";
       continue;
     }
