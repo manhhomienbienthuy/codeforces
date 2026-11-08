@@ -29,8 +29,6 @@ int main() {
     int64_t lim = l - 1;
 
     int64_t mx = (int64_t)sqrtl(lim);
-    while ((mx + 1) * (mx + 1) <= lim) mx++;
-    while (mx * mx > lim) mx--;
 
     int64_t ans = a[n - 1], pref = 0;
     int p = 0;
@@ -41,13 +39,9 @@ int main() {
         p++;
       }
 
-      cout << "debug: " << x << " " << pref << " " << p << "\n";
-
       int64_t keep = pref;
       keep += 1LL * (n - 1 - p) * x;
       keep += min(0LL + a[n - 1], lim / x);
-
-      cout << "debug1: " << keep << "\n";
 
       ans = max(ans, keep);
     }
