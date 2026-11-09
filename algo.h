@@ -15,8 +15,9 @@ const int MOD = 998244353;
 int64_t pw(int64_t a, int64_t p, int64_t m = MOD) {
   int64_t r = 1;
 
-  for (a %= m; p > 0; p >>= 1, a = a * a % m)
+  for (a %= m; p > 0; p >>= 1, a = a * a % m) {
     if (p & 1) r = r * a % m;
+  }
 
   return r;
 }
