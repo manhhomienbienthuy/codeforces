@@ -19,16 +19,16 @@ int main() {
     cin >> n >> l;
 
     vector<int> a(n);
-    for (int& x : a) cin >> x;
+    int64_t sum = 0;
+
+    for (int& x : a) {
+      cin >> x;
+      sum += x;
+    }
 
     sort(a.begin(), a.end());
 
-    int64_t sum = 0;
-    for (int x : a) sum += x;
-
-    int64_t lim = l - 1;
-
-    int64_t mx = (int64_t)sqrtl(lim);
+    int64_t lim = l - 1, mx = (int64_t)sqrtl(lim);
 
     int64_t ans = a[n - 1], pref = 0;
     int p = 0;
