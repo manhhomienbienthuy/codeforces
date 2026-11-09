@@ -1,7 +1,7 @@
 /*!
  * author: manhhomienbienthuy
  * created: 2026-11-09T02:00:30+00:00
- * https://codeforces.com/gym/106812/problem/A
+ * https://codeforces.com/gym/106812/problem/1
  */
 
 #include <bits/stdc++.h>

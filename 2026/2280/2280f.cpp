@@ -7,23 +7,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct fast_hash {
-  static uint64_t splitmix64(uint64_t x) {
-    x += 0x9e3779b97f4a7c15;
-    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-    x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-    return x ^ (x >> 31);
-  }
-
-  size_t operator()(uint64_t x) const {
-    static const uint64_t r =
-        chrono::steady_clock::now().time_since_epoch().count();
-    return splitmix64(x + r);
-  }
-};
-
-uint64_t key(int a, int b) { return (uint64_t)(uint32_t)a << 32 | (uint32_t)b; }
-
 vector<int> bfs(int src, const vector<vector<int>>& g) {
   int n = (int)g.size();
 
@@ -32,6 +15,32 @@ vector<int> bfs(int src, const vector<vector<int>>& g) {
 
   dist[src] = 0;
   q.push(src);
+
+  while (!q.empty()) {
+    int v = q.front();
+    q.pop();
+
+    for (int to : g[v]) {
+      if (dist[to] != -1) continue;
+
+      dist[to] = dist[v] + 1;
+      q.push(to);
+    }
+  }
+
+  return dist;
+}
+
+vector<int> bfs_multi(const vector<int>& src, const vector<vector<int>>& g) {
+  int n = (int)g.size();
+
+  vector<int> dist(n, -1);
+  queue<int> q;
+
+  for (int v : src) {
+    dist[v] = 0;
+    q.push(v);
+  }
 
   while (!q.empty()) {
     int v = q.front();
@@ -68,11 +77,7 @@ int main() {
     z--;
 
     vector<vector<int>> g(n);
-    vector<int> sa(2 * m), sb(2 * m);
-
-    unordered_map<uint64_t, int, fast_hash> id;
-    id.max_load_factor(0.7f);
-    id.reserve(2 * m);
+    bool ac_edge = false;
 
     for (int i = 0; i < m; i++) {
       int a, b;
@@ -84,79 +89,36 @@ int main() {
       g[a].push_back(b);
       g[b].push_back(a);
 
-      int id1 = 2 * i;
-      int id2 = 2 * i + 1;
-
-      sa[id1] = a;
-      sb[id1] = b;
-
-      sa[id2] = b;
-      sb[id2] = a;
-
-      id[key(a, b)] = id1;
-      id[key(b, a)] = id2;
+      if ((a == w && b == y) || (a == y && b == w)) ac_edge = true;
     }
 
-    vector<int> dx = bfs(x, g);
-    vector<int> dz = bfs(z, g);
+    vector<int> dx = bfs(x, g), dz = bfs(z, g);
 
-    const int INF = INT_MAX / 4;
+    int ans = INT_MAX / 4;
 
-    vector<int> dist(2 * m, INF);
-    vector<bool> used(n, false);
+    if (w == y) ans = min(ans, dx[z]);
 
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+    if (ac_edge) ans = min(ans, dx[y] + 1 + dz[w]);
 
-    auto relax = [&](int s, int nd) {
-      if (nd >= dist[s]) return;
-
-      dist[s] = nd;
-      pq.push({nd, s});
-    };
+    vector<vector<int>> src(3);
 
     for (int p : g[w]) {
-      int s = id[key(p, w)];
-      relax(s, dx[p] + 1);
+      int type = dx[p] - dx[w] + 1;
+      src[type].push_back(p);
     }
 
-    while (!pq.empty()) {
-      auto [d, s] = pq.top();
-      pq.pop();
+    for (int type = 0; type <= 2; type++) {
+      if (src[type].empty()) continue;
 
-      if (d != dist[s]) continue;
+      vector<int> dis3 = bfs_multi(src[type], g);
 
-      int a = sa[s], b = sb[s];
+      for (int p : g[y]) {
+        int cur = dx[w] + type;
+        cur += 3 * (dis3[p] + 1);
+        cur += dz[p];
 
-      relax(id[key(b, a)], d + 1);
-
-      if (g[a].size() < g[b].size()) {
-        for (int c : g[a]) {
-          if (c == b) continue;
-
-          if (id.find(key(b, c)) != id.end()) relax(id[key(c, a)], d + 2);
-        }
-      } else {
-        for (int c : g[b]) {
-          if (c == a) continue;
-
-          if (id.find(key(a, c)) != id.end()) relax(id[key(c, a)], d + 2);
-        }
+        ans = min(ans, cur);
       }
-
-      if (!used[a]) {
-        used[a] = true;
-
-        for (int c : g[a]) relax(id[key(c, a)], d + 3);
-      }
-    }
-
-    int ans = INF;
-
-    if (w == y) ans = dx[z];
-
-    for (int p : g[y]) {
-      int s = id[key(y, p)];
-      ans = min(ans, dist[s] + dz[p]);
     }
 
     cout << ans << '\n';
