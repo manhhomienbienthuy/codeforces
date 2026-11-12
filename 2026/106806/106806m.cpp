@@ -22,7 +22,7 @@ int main() {
     } else if (k % a == 0 || k % b == 0) {
       l += 4;
     } else {
-      l += (int)to_string(k).length();
+      l += int(to_string(k).length());
     }
 
     if (l == n) {
