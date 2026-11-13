@@ -11,12 +11,9 @@ for _ in range(t):
     s = input().strip()
 
     ans = 0
-    x = "RB"
+    color = "RB"
     cur = 0
     for c in s:
-        if c == x[cur]:
-            cur = (cur + 1) & 1
-            continue
-        ans += 1
+        ans += c != color[cur]
         cur = 1 if c == 'R' else 0
     print(ans)

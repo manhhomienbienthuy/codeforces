@@ -22,7 +22,4 @@ for _ in range(t):
         w[i] = 1 ^ pref
         s ^= (a[i] & 1) & w[i]
 
-    if s:
-        print("Alice")
-    else:
-        print("Bob")
+    print("Alice" if s else "Bob")

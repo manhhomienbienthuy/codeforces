@@ -3,30 +3,29 @@
 # https://codeforces.com/contest/2290/problem/C
 
 import sys
-from collections import Counter
 input = sys.stdin.readline
 
 t = int(input())
 for _ in range(t):
     n = int(input())
-    h = list(map(int, input().split()))
+    h = sorted(map(int, input().split()))
 
-    cnt = Counter(h)
-    vals = sorted(cnt)
+    cur = -1
 
-    left = []
-    mid = []
-    right = []
+    left, right = [], []
+    ans = 0
+    flag = False
 
-    for x in vals:
-        left.append(x)
-
-        if cnt[x] > 2:
-            mid += [x] * (cnt[x] - 2)
-
-    for x in reversed(vals):
-        if cnt[x] >= 2:
+    for x in h:
+        if x != cur:
+            flag = False
+            ans += 1
+            cur = x
+            left.append(x)
+        else:
+            ans += not flag
+            flag = True
             right.append(x)
 
-    print(sum(min(c, 2) for c in cnt.values()))
-    print(*left, *mid, *right)
+    print(ans)
+    print(*left, *right[::-1])
