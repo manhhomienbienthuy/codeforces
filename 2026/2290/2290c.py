@@ -10,8 +10,6 @@ for _ in range(t):
     n = int(input())
     h = sorted(map(int, input().split()))
 
-    cur = -1
-
     left, right = [], []
     ans = 0
 
