@@ -14,18 +14,18 @@ for _ in range(t):
 
     left, right = [], []
     ans = 0
-    flag = False
 
-    for x in h:
-        if x != cur:
-            flag = False
-            ans += 1
-            cur = x
-            left.append(x)
-        else:
-            ans += not flag
-            flag = True
-            right.append(x)
+    i = 0
+    while i < n:
+        left.append(h[i])
+
+        j = i + 1
+        while j < n and h[j] == h[i]:
+            right.append(h[i])
+            j += 1
+
+        ans += min(2, j - i)
+        i = j
 
     print(ans)
     print(*left, *right[::-1])
