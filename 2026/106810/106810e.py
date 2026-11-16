@@ -56,4 +56,4 @@ for _ in range(t):
         if ans_i == -1:
             print(-1)
         else:
-            print(ans_i, ans_j)
+            print(ans_i + 1, ans_j + 1)
