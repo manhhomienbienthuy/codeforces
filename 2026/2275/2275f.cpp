@@ -9,7 +9,6 @@ using namespace std;
 
 const int MAXN = 1e6 + 1;
 int spf[MAXN];
-int64_t rnd[MAXN];
 
 void init() {
   for (int i = 2; i < MAXN; i++) {
@@ -35,80 +34,65 @@ int main() {
     int n;
     cin >> n;
 
-    vector<int> a(n);
-    for (int& x : a) cin >> x;
+    int mx = 0;
+    vector<int> a(n), s(n);
 
-    map<vector<int>, int> id_mp;
-    int nxt_id = 0;
-
-    auto get_id = [&](const vector<int>& v) -> int {
-      auto it = id_mp.find(v);
-
-      if (it != id_mp.end()) {
-        return it->second;
-      }
-
-      int id = nxt_id++;
-      id_mp[v] = id;
-      return id;
-    };
-
-    vector<int> a_id(n);
-
-    unordered_map<int, int64_t> cnt_a;
-
-    for (int i = 0; i < n; i++) {
-      int x = a[i];
-
-      vector<int> kernel;
-
-      while (x > 1) {
-        int p = spf[x];
-        int c = 0;
-
-        while (x % p == 0) {
-          x /= p;
-          c++;
-        }
-
-        if (c & 1) {
-          kernel.push_back(p);
-        }
-      }
-
-      int id = get_id(kernel);
-      a_id[i] = id;
-      cnt_a[id]++;
+    for (int& x : a) {
+      cin >> x;
+      mx = max(mx, x);
     }
 
-    vector<int> odd;
+    vector<int> cnt(mx + 1);
+
+    for (int i = 0; i < n; i++) {
+      int x = a[i], r = 1;
+
+      while (x > 1) {
+        int d = spf[x], odd = 0;
+
+        while (!(x % d)) {
+          x /= d;
+          odd ^= 1;
+        }
+
+        if (odd) r *= d;
+      }
+
+      s[i] = r;
+      cnt[r]++;
+    }
+
+    set<int> st;
     int64_t ans = 0;
 
     for (int i = 0; i < n; i++) {
-      int x = a[i];
+      int x = s[i];
 
       while (x > 1) {
         int p = spf[x];
-        int c = 0;
 
-        while (x % p == 0) {
-          x /= p;
-          c++;
+        if (st.count(p)) {
+          st.erase(p);
+        } else {
+          st.insert(p);
         }
 
-        if (c & 1) {
-          auto it = lower_bound(odd.begin(), odd.end(), p);
-
-          if (it != odd.end() && *it == p) {
-            odd.erase(it);
-          } else {
-            odd.insert(it, p);
-          }
-        }
+        x /= p;
       }
 
-      int pref_id = get_id(odd);
-      ans += cnt_a[pref_id];
+      int ker = 1;
+      bool ok = true;
+
+      for (int p : st) {
+        if (ker > mx / p) {
+          ok = false;
+          break;
+        }
+
+        ker *= p;
+      }
+
+      if (ok) ans += cnt[ker];
     }
 
     cout << ans << '\n';

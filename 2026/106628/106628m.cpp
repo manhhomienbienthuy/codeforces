@@ -2,6 +2,7 @@
  * author: manhhomienbienthuy
  * created: 2026-07-30T03:10:37+00:00
  * https://codeforces.com/gym/106628/problem/M
+ * LRU with dirty
  */
 
 #include <bits/stdc++.h>
