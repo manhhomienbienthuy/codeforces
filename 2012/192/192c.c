@@ -72,16 +72,16 @@ main (int argc, char *argv[])
   scanf ( "%d", &n);
   while (getchar () != '\n');
   max = 0;
- 
+
   for (i = 0; i < n; i++)
     {
       gets (a[i]);
       if (strlen (a[i]) == 1)
 	max = 1;
     }
- 
+
   strcpy (str, "");
- 
+
   for (i = 0; i < n; i++)
     {
       if (a[i][0] == a[i][strlen (a[i]) - 1])

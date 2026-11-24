@@ -13,10 +13,10 @@ check (int n)
       x = 2 * n - i * (i + 1);
       j = (int) sqrt (x);
       if (j * (j + 1) == x)
-	if (j > 0)
-	  return 1;
+        if (j > 0)
+          return 1;
     }
-  return 0;		    
+  return 0;
 }
 
 int
