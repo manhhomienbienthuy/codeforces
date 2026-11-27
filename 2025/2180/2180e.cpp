@@ -29,8 +29,7 @@ int main() {
 
     int64_t lo = l & (q - 1), hi = r & (q - 1), left = q - lo, right = hi + 1;
 
-    int64_t low_l = left & -left, low_r = right & -right,
-            base = min(low_l, low_r);
+    int64_t base = min(left & -left, right & -right);
 
     if (left == right) base <<= 1;
 
