@@ -18,16 +18,23 @@ int main() {
     int64_t l, r;
     cin >> l >> r;
 
-    int64_t lb = bit_width((uint64_t)(l & -l)) - 1,
-            rb = bit_width((uint64_t)((r + 1) & -(r + 1)));
+    int64_t x = l ^ r;
 
-    int64_t s = min(lb, rb);
+    if (!x) {
+      cout << 0 << '\n';
+      continue;
+    }
 
-    int64_t left = l >> s, right = r >> s, sm = left + right;
+    int64_t q = 1LL << (bit_width((uint64_t)x) - 1);
 
-    s += !(sm & (sm + 1));
+    int64_t lo = l & (q - 1), hi = r & (q - 1), left = q - lo, right = hi + 1;
 
-    cout << (1LL << s) - 1 << '\n';
+    int64_t low_l = left & -left, low_r = right & -right,
+            base = min(low_l, low_r);
+
+    if (left == right) base <<= 1;
+
+    cout << base - 1 << '\n';
   }
 
   return 0;
